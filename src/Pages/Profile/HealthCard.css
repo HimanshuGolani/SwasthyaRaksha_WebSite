@@ -1,0 +1,70 @@
+.main-container {
+  margin: 0 auto;
+  width: 90vw;
+  max-width: 1200px;
+  height: auto;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.sub-container {
+  background: url("../../assets/images/HpSideImg.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  max-width: 400px;
+  width: 30vw;
+  height: 700px;
+  margin-top: 20px;
+  margin-right: 9%;
+}
+
+.right-sub-container {
+  background-color: rgb(175, 179, 184);
+  max-width: 400px;
+  width: 40vw;
+  height: 450px;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: larger;
+  font-weight: bolder;
+  font-family: "Courier New", Courier, monospace;
+  border-radius: 35px;
+}
+
+input[type="text"],
+input[type="number"],
+label {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+input[type="text"],
+input[type="number"] {
+  background-color: rgb(104, 106, 108);
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .main-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .sub-container {
+    width: 80vw;
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+
+  .right-sub-container {
+    width: 80vw;
+    margin: 0;
+  }
+}

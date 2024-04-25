@@ -3,18 +3,32 @@ import { useNavigate } from "react-router-dom";
 import DateTime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 import "../assets/Uploade.css";
+import axios from "axios";
 
 const UploadePrescription = () => {
   const navigator = useNavigate();
 
   const [prescriptionData, setPrescriptionData] = useState({
-    prescriptionImg: null,
+    prescriptionImg: "",
     doctorName: "",
     dateOfPrescription: "",
     hospitalName: "",
   });
 
-  const { doctorName, dateOfPrescription, hospitalName } = prescriptionData;
+  const addPrescription = async () => {
+    const response = await axios.post(
+      `http://localhost:4500/api/prescription/add`,
+      {
+        DoctorName: prescriptionData.doctorName,
+        HospitalName: prescriptionData.doctorName,
+        image: prescriptionData.prescriptionImg,
+        prescDate: prescriptionData.dateOfPrescription,
+        user: localStorage.getItem("userId"),
+      }
+    );
+
+    console.log(response);
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -39,8 +53,9 @@ const UploadePrescription = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    await addPrescription();
     console.log("Form submitted:", prescriptionData);
     navigator("/prescription");
   };
@@ -56,7 +71,7 @@ const UploadePrescription = () => {
                 <input
                   type="text"
                   name="doctorName"
-                  value={doctorName}
+                  value={prescriptionData.doctorName}
                   onChange={handleInputChange}
                   placeholder="Enter the doctor's name"
                 />
@@ -70,7 +85,7 @@ const UploadePrescription = () => {
                 <br />
                 <DateTime
                   name="dateOfPrescription"
-                  value={dateOfPrescription}
+                  value={prescriptionData.dateOfPrescription}
                   onChange={handleDateChange}
                   timeFormat={false}
                   inputProps={{ placeholder: "DD-MM-YYYY" }}
@@ -84,7 +99,7 @@ const UploadePrescription = () => {
                 <input
                   type="text"
                   name="hospitalName"
-                  value={hospitalName}
+                  value={prescriptionData.hospitalName}
                   onChange={handleInputChange}
                   placeholder="Enter the hospital name"
                 />
@@ -96,10 +111,16 @@ const UploadePrescription = () => {
               <li>
                 <p>Select the prescription image from your files.</p>
                 <br />
-                <input
+                {/* <input
                   type="file"
                   accept="image/*"
                   onChange={handleFileChange}
+                /> */}
+                <input
+                  type="text"
+                  name="prescriptionImg"
+                  value={prescriptionData.prescriptionImg}
+                  onChange={handleInputChange}
                 />
               </li>
             </ol>

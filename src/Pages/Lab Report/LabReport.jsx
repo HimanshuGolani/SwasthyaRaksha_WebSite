@@ -1,8 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LabReportsCard from "../../Components/LabReportsCard";
+import axios from "axios";
 
 const LabReport = () => {
+  const [labReportData, setLabReportData] = useState([]);
+  const id = localStorage.getItem("userId");
+  const getLabR = async () => {
+    const response = await axios.get(`http://localhost:4500/api/labR/${id}`);
+    console.log(response.data.labReport);
+    setLabReportData(response.data.labReport.labReports);
+  };
+
+  useEffect(() => {
+    getLabR();
+  }, []);
   return (
     <>
       <div className="flex flex-col items-center pb-12 bg-white text-neutral-900">
@@ -37,7 +49,14 @@ const LabReport = () => {
             <div className="grow">Report Name</div>
             <div className="flex-auto">Date</div>
           </div>
-          <LabReportsCard />
+          {labReportData.map((labReport, index) => (
+            <LabReportsCard
+              key={index}
+              ReportImage={labReport.image}
+              ReportType={labReport.ReportName}
+              ReportDate={labReport.ReportDate}
+            />
+          ))}
         </div>
       </div>
     </>

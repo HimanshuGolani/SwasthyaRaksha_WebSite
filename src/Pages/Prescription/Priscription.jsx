@@ -1,17 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PrescriptionCard from "../../Components/PrescriptionCard";
-
+import axios from "axios";
 const Priscription = () => {
-  const prescription = [
-    {
-      prescUrl:
-        "https://englishtribuneimages.blob.core.windows.net/gallary-content/2022/9/2022_9$largeimg_1999179093.jpeg",
-      DoctorName: "Dr.Ashok Waghwani",
-      HospitalName: "At Shresh Hospital",
-      DateOfReport: "07/01/2022",
-    },
-  ];
+  const [prescriptions, setPrescriptions] = useState([]);
+  const getAllPrescriptions = async () => {
+    try {
+      const id = localStorage.getItem("userId");
+      const response = await axios.get(
+        `http://localhost:4500/api/prescription/${id}`
+      );
+      const data = response.data.prescription;
+      console.log(`The data is : ${data}`);
+      setPrescriptions(data.prescriptions);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getAllPrescriptions();
+  }, []);
 
   return (
     <>
@@ -40,9 +49,21 @@ const Priscription = () => {
             Prescriptions
           </div>
         </div>
-        {prescription.map((item, index) => (
-          <PrescriptionCard key={index} {...item} />
-        ))}
+        {prescriptions.length > 0 ? (
+          prescriptions.map((item, index) => (
+            <PrescriptionCard
+              prescUrl={item.image}
+              DoctorName={item.DoctorName}
+              HospitalName={item.HospitalName}
+              DateOfReport={item.prescDate}
+              key={index}
+            />
+          ))
+        ) : (
+          <div className="flex justify-center align-center m-auto">
+            <h1>No prescriptions added yet please add </h1>
+          </div>
+        )}
       </div>
     </>
   );

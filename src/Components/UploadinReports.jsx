@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import DateTime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
 import "../assets/Uploade.css";
 
 const UploadinReports = () => {
@@ -11,10 +11,8 @@ const UploadinReports = () => {
   const [reportData, setReportData] = useState({
     reportName: "",
     reportDate: "",
-    reportImage: null,
+    reportImage: "",
   });
-
-  const { reportName, reportDate, reportImage } = reportData;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -24,13 +22,13 @@ const UploadinReports = () => {
     }));
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setReportData((prevData) => ({
-      ...prevData,
-      reportImage: file,
-    }));
-  };
+  // const handleFileChange = (e) => {
+  //   const file = e.target.files[0];
+  //   setReportData((prevData) => ({
+  //     ...prevData,
+  //     reportImage: file,
+  //   }));
+  // };
 
   const handleDateChange = (date) => {
     setReportData((prevData) => ({
@@ -45,6 +43,17 @@ const UploadinReports = () => {
     navigator("/labReport");
   };
 
+  const addLabReports = async () => {
+    const response = await axios.post(`http://localhost:4500/api/labR/add`, {
+      ReportName: reportData.reportName,
+      ReportDate: reportData.reportDate,
+      image: reportData.reportImage,
+      user: localStorage.getItem("userId"),
+    });
+    const data = response.data;
+    setReportData(data);
+  };
+
   return (
     <>
       <div className="center-div">
@@ -56,7 +65,7 @@ const UploadinReports = () => {
                 <input
                   type="text"
                   name="reportName"
-                  value={reportName}
+                  value={reportData.reportName}
                   onChange={handleInputChange}
                   placeholder="Enter the name of the report"
                 />
@@ -70,7 +79,7 @@ const UploadinReports = () => {
                 <br />
                 <DateTime
                   name="reportDate"
-                  value={reportDate}
+                  value={reportData.reportDate}
                   onChange={handleDateChange}
                   timeFormat={false}
                   inputProps={{ placeholder: "DD-MM-YYYY" }}
@@ -83,10 +92,16 @@ const UploadinReports = () => {
               <li>
                 <p>Select the image from your files.</p>
                 <br />
-                <input
+                {/* <input
                   onChange={handleFileChange}
                   type="file"
                   name="reportImage"
+                /> */}
+                <input
+                  type="text"
+                  name="reportImage"
+                  value={reportData.reportImage}
+                  onChange={handleInputChange}
                 />
               </li>
             </ol>
@@ -94,6 +109,7 @@ const UploadinReports = () => {
             <button
               type="submit"
               className="bg-blue-900 text-white px-4 py-2 rounded-md mt-4"
+              onClick={addLabReports}
             >
               Submit
             </button>

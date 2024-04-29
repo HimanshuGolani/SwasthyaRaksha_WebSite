@@ -1,3 +1,4 @@
+// user.js
 import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
@@ -19,7 +20,7 @@ const userSchema = new Schema({
   },
   healthProfiles: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.Types.ObjectId,
       ref: "HealthProfile",
     },
   ],
@@ -41,14 +42,20 @@ const userSchema = new Schema({
     default: "Normal-User",
     required: true,
   },
-  doctorInfo: {
-    patients: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
-  },
+  // AccessInfo for users that this user can access
+  accessTo: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
+  // AccessInfo for users that can access this user's details
+  accessFor: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
 });
 
 export default mongoose.model("User", userSchema);

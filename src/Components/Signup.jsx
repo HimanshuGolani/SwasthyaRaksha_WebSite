@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import CircularProgressWithLabel from "./CircularProgressWithLabel";
 import { useNavigate } from "react-router-dom";
 
@@ -9,7 +8,7 @@ const SignupStepper = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const navigator = useNavigate();
-  let userId;
+
   const [formData, setFormData] = useState({
     role: "Normal-User",
     userName: "",
@@ -28,20 +27,19 @@ const SignupStepper = () => {
   });
 
   useEffect(() => {
-    const updateProgressBar = () => {
-      const progressBar = document.getElementById("progress-bar");
-      const progress = ((currentStep - 1) / 3) * 100;
-      progressBar.style.width = `${progress}%`;
-    };
-    updateProgressBar();
+    const progressBarWidth = `${((currentStep - 1) / 3) * 100}%`;
+    document.documentElement.style.setProperty(
+      "--progress-bar-width",
+      progressBarWidth
+    );
   }, [currentStep]);
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentStep < 3) {
       setCurrentStep((prevStep) => prevStep + 1);
     } else {
       // Last step, perform signup
-      signup();
+      await signup();
     }
   };
 
@@ -63,10 +61,9 @@ const SignupStepper = () => {
           password: formData.password,
         }
       );
-      console.log(response);
-      userId = await response.data.user._id;
+      const userId = response.data.user._id;
       // Assuming signup is successful, proceed to create health profile
-      await createHealthProfile();
+      await createHealthProfile(userId);
       toast.success("User created successfully!");
       navigator("/");
     } catch (error) {
@@ -77,24 +74,20 @@ const SignupStepper = () => {
     }
   };
 
-  const createHealthProfile = async () => {
+  const createHealthProfile = async (userId) => {
     try {
-      const response = await axios.post(
-        "http://localhost:4500/api/healthprofiles/create",
-        {
-          user: userId,
-          phoneNumber: formData.phoneNumber,
-          address: formData.address,
-          city: formData.city,
-          pincode: formData.pincode,
-          bloodGroup: formData.bloodGroup,
-          age: formData.age,
-          pancreatic: formData.pancreatic,
-          sugarType: formData.sugarType,
-          diabetic: formData.diabetic,
-        }
-      );
-      console.log("Health profile created:", response.data);
+      await axios.post("http://localhost:4500/api/healthprofiles/create", {
+        user: userId,
+        phoneNumber: formData.phoneNumber,
+        address: formData.address,
+        city: formData.city,
+        pincode: formData.pincode,
+        bloodGroup: formData.bloodGroup,
+        age: formData.age,
+        pancreatic: formData.pancreatic,
+        sugarType: formData.sugarType,
+        diabetic: formData.diabetic,
+      });
     } catch (error) {
       console.error("Error creating health profile:", error);
     }
@@ -143,9 +136,8 @@ const SignupStepper = () => {
         </div>
         <div className="progress-bar relative flex items-center h-2 w-full max-w-screen-lg mx-auto bg-gray-400 rounded-full">
           <div
-            id="progress-bar"
             className="progress absolute h-full bg-blue-500 rounded-full"
-            style={{ width: `${((currentStep - 1) / 3) * 100}%` }}
+            style={{ width: "var(--progress-bar-width)" }}
           ></div>
         </div>
       </div>

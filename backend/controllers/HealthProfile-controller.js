@@ -1,14 +1,13 @@
 import User from "../model/User.js";
 import HealthProfile from "../model/HealthProfile.js";
-
-export const getHealthprofile = async (req, res) => {
+export const getHealthProfile = async (req, res) => {
   try {
     const userId = req.params.id;
-    const profileData = await User.findById(userId).populate("healthProfiles");
-    if (!profileData) {
+    const user = await User.findById(userId).populate("healthProfiles");
+    if (!user) {
       return res.status(404).json({ message: "No Health Profile Found" });
     }
-    return res.status(200).json({ profileData: profileData.healthProfiles });
+    return res.status(200).json({ profileData: user.healthProfiles });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Error fetching Health Profile" });
@@ -28,6 +27,8 @@ export const createHealthProfile = async (req, res) => {
     city,
     pincode,
   } = req.body;
+
+  console.log(req.body);
 
   try {
     // Check if the user exists
@@ -52,7 +53,7 @@ export const createHealthProfile = async (req, res) => {
     });
 
     // Update the user document to include the health profile reference
-    existingUser.healthProfiles.push(profileData._id);
+    existingUser.healthProfiles = profileData._id;
     await existingUser.save();
 
     return res.status(200).json({ savedProfile: profileData });

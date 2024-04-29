@@ -37,21 +37,25 @@ export const signup = async (req, res, next) => {
     }
 
     // Hash the password
-    const hashedpassword = bcrypt.hashSync(password, 10); // Specify the number of salt rounds
+    const hashedPassword = bcrypt.hashSync(password, 10); // Specify the number of salt rounds
 
     // Create new user object
     const user = new User({
       role,
       name,
       email,
-      password: hashedpassword,
+      password: hashedPassword,
     });
 
     // Save user to database
     await user.save();
-    console.log("The user from the signup", user);
+
+    // Create a user object to send in response without the password field
+    const userToSend = { ...user.toObject() };
+    delete userToSend.password;
+
     // Return newly created user with 201 status
-    return res.status(201).json({ user });
+    return res.status(201).json({ user: userToSend });
   } catch (err) {
     // If error occurs, log error and return 500 status with message
     console.error(err);
@@ -95,5 +99,74 @@ export const login = async (req, res, next) => {
     return res.status(500).json({
       message: "An error occurred while logging in",
     });
+  }
+};
+
+export const searchUser = async (req, res) => {
+  console.log(req.query.search);
+  const reqUser = req.query.search
+    ? {
+        $or: [
+          { name: { $regex: req.query.search, $options: "i" } },
+          { email: { $regex: req.query.search, $options: "i" } },
+        ],
+      }
+    : {};
+
+  const users = await User.find(
+    { ...reqUser },
+    { name: 1, email: 1, _id: 1, healthProfiles: 1 }
+  );
+  res.send(users);
+};
+export const setAccessToInfo = async (req, res) => {
+  const { userId, accessTo } = req.query;
+  try {
+    // Find the user by userId
+    const currUser = await User.findByIdAndUpdate(
+      userId,
+      { $addToSet: { accessTo: accessTo } },
+      { new: true }
+    );
+    const accessToUser = await User.findByIdAndUpdate(
+      accessTo,
+      { $addToSet: { accessFor: userId } },
+      { new: true }
+    );
+
+    if (!currUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json(currUser);
+  } catch (error) {
+    console.error("Error updating accessTo:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const removeAccessToInfo = async (req, res) => {
+  const { userId, accessTo } = req.query;
+  try {
+    // Find the user by userId
+    const currUser = await User.findByIdAndUpdate(
+      userId,
+      { $pull: { accessTo: accessTo } },
+      { new: true }
+    );
+    const accessToUser = await User.findByIdAndUpdate(
+      accessTo,
+      { $pull: { accessFor: userId } },
+      { new: true }
+    );
+
+    if (!currUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json(currUser);
+  } catch (error) {
+    console.error("Error updating accessTo:", error);
+    res.status(500).json({ error: "Error removing access" });
   }
 };

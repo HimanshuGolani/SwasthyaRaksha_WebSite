@@ -25,7 +25,8 @@ const Profile = () => {
       const response = await axios.get(
         `http://localhost:4500/api/healthprofiles/${id}`
       );
-      const data = response.data.profileData.healthProfiles[0];
+      const data = response.data;
+      console.log(data);
 
       userName = response.data.profileData.name;
       console.log(response.data);

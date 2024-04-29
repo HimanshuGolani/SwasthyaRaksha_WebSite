@@ -30,6 +30,10 @@ const userSchema = new Schema({
       ref: "LabReport",
     },
   ],
+  healthProfile: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "HealthProfile",
+  },
   role: {
     type: String,
     enum: ["Doctor", "Normal-User"],

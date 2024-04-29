@@ -1,68 +1,53 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import CircularProgressWithLabel from "./CircularProgressWithLabel";
 import { useNavigate } from "react-router-dom";
 
 const SignupStepper = () => {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const navigator = useNavigate();
+  const [userId, setUserId] = useState();
 
   const [formData, setFormData] = useState({
     role: "Normal-User",
-    userName: "",
-    userEmail: "",
+    name: "",
+    email: "",
     password: "",
-    bloodGroup: "",
-    age: "",
-    pancreatic: false,
-    sugarType: "",
-    diabetic: false,
     phoneNumber: "",
     address: "",
     city: "",
     pincode: "",
-    image: "",
+    heartDisease: false,
+    hypertension: false,
+    allergies: [],
+    diabetes: "No",
   });
+  const [loading, setLoading] = useState(false);
+  const navigator = useNavigate();
 
-  useEffect(() => {
-    const progressBarWidth = `${((currentStep - 1) / 3) * 100}%`;
-    document.documentElement.style.setProperty(
-      "--progress-bar-width",
-      progressBarWidth
-    );
-  }, [currentStep]);
-
-  const handleNext = async () => {
-    if (currentStep < 3) {
-      setCurrentStep((prevStep) => prevStep + 1);
-    } else {
-      // Last step, perform signup
-      await signup();
-    }
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
-  const handlePrevious = () => {
-    if (currentStep > 1) {
-      setCurrentStep((prevStep) => prevStep - 1);
-    }
-  };
-
-  const signup = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       setLoading(true);
       const response = await axios.post(
         "http://localhost:4500/api/user/signup",
         {
           role: formData.role,
-          name: formData.userName,
-          email: formData.userEmail,
+          name: formData.name,
+          email: formData.email,
           password: formData.password,
         }
       );
-      const userId = response.data.user._id;
-      // Assuming signup is successful, proceed to create health profile
+      console.log(response.data);
+      setUserId(response.data.user._id);
+      console.log(userId);
       await createHealthProfile(userId);
       toast.success("User created successfully!");
       navigator("/");
@@ -82,223 +67,239 @@ const SignupStepper = () => {
         address: formData.address,
         city: formData.city,
         pincode: formData.pincode,
-        bloodGroup: formData.bloodGroup,
-        age: formData.age,
-        pancreatic: formData.pancreatic,
-        sugarType: formData.sugarType,
-        diabetic: formData.diabetic,
+        heartDisease: formData.heartDisease,
+        hypertension: formData.hypertension,
+        allergies: formData.allergies,
+        diabetes: formData.diabetes,
       });
     } catch (error) {
       console.error("Error creating health profile:", error);
     }
   };
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleCheckboxChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.checked });
-  };
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <ToastContainer />
-
-      <div className="flex justify-center ml-auto mr-auto align-center flex-col">
-        <div className="stepper flex items-center justify-center mb-8">
-          <div
-            className={`step ${currentStep > 1 ? "complete" : ""} ${
-              currentStep === 1 ? "active" : ""
-            } mx-2`}
-          >
-            <div className="step-number w-10 h-10 flex items-center justify-center rounded-full bg-gray-300">
-              1
+      <div className="max-w-md w-full bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div className="mb-4">
+          <h1 className="text-center text-3xl font-bold mb-4">Signup</h1>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="role"
+              >
+                Select User Type:
+              </label>
+              <select
+                id="role"
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                className="input-field"
+              >
+                <option value="Normal-User">Normal User</option>
+                <option value="Doctor">Doctor</option>
+              </select>
             </div>
-            <div className="step-name mt-2">User Type</div>
-          </div>
-          <div
-            className={`step ${currentStep > 2 ? "complete" : ""} ${
-              currentStep === 2 ? "active" : ""
-            } mx-2`}
-          >
-            <div className="step-number w-10 h-10 flex items-center justify-center rounded-full bg-gray-300">
-              2
-            </div>
-            <div className="step-name mt-2">User Info</div>
-          </div>
-          <div className={`step ${currentStep === 3 ? "active" : ""} mx-2`}>
-            <div className="step-number w-10 h-10 flex items-center justify-center rounded-full bg-gray-300">
-              3
-            </div>
-            <div className="step-name mt-2">Health Card</div>
-          </div>
-        </div>
-        <div className="progress-bar relative flex items-center h-2 w-full max-w-screen-lg mx-auto bg-gray-400 rounded-full">
-          <div
-            className="progress absolute h-full bg-blue-500 rounded-full"
-            style={{ width: "var(--progress-bar-width)" }}
-          ></div>
-        </div>
-      </div>
-
-      <div className="step-component mt-8">
-        {currentStep === 1 && (
-          <div>
-            <label htmlFor="role">Select User Type:</label>
-            <select
-              id="role"
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              className="input-field"
-            >
-              <option value="user">Normal User</option>
-              <option value="doctor">Doctor</option>
-            </select>
-          </div>
-        )}
-        {currentStep === 2 && (
-          <div>
-            <input
-              type="text"
-              placeholder="Enter Name"
-              name="userName"
-              value={formData.userName}
-              onChange={handleChange}
-              className="input-field"
-            />
-            <input
-              type="text"
-              placeholder="Enter Email"
-              name="userEmail"
-              value={formData.userEmail}
-              onChange={handleChange}
-              className="input-field"
-            />
-            <input
-              type="text"
-              placeholder="Enter Password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className="input-field"
-            />
-          </div>
-        )}
-        {currentStep === 3 && (
-          <div>
-            {/* Health profile fields */}
-            <input
-              type="text"
-              placeholder="Phone Number"
-              name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={handleChange}
-              className="input-field"
-            />
-            <input
-              type="text"
-              placeholder="Address"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              className="input-field"
-            />
-            <input
-              type="text"
-              placeholder="City"
-              name="city"
-              value={formData.city}
-              onChange={handleChange}
-              className="input-field"
-            />
-            <input
-              type="text"
-              placeholder="Pincode"
-              name="pincode"
-              value={formData.pincode}
-              onChange={handleChange}
-              className="input-field"
-            />
-            {/* Additional fields */}
-            <input
-              type="text"
-              placeholder="Blood Group"
-              name="bloodGroup"
-              value={formData.bloodGroup}
-              onChange={handleChange}
-              className="input-field"
-            />
-            <input
-              type="text"
-              placeholder="Age"
-              name="age"
-              value={formData.age}
-              onChange={handleChange}
-              className="input-field"
-            />
-            <div className="radio-group">
-              <label htmlFor="sugarType">Blood Pressure Type:</label>
-              <div>
-                <input
-                  type="radio"
-                  id="high-bp"
-                  name="sugarType"
-                  value="high-bp"
-                  checked={formData.sugarType === "high-bp"}
-                  onChange={handleChange}
-                />
-                <label htmlFor="high-bp">High Blood Pressure</label>
-              </div>
-              <div>
-                <input
-                  type="radio"
-                  id="low-bp"
-                  name="sugarType"
-                  value="low-bp"
-                  checked={formData.sugarType === "low-bp"}
-                  onChange={handleChange}
-                />
-                <label htmlFor="low-bp">Low Blood Pressure</label>
-              </div>
-            </div>
-            <div className="checkbox-group">
-              <label htmlFor="diabetic">Any Diabetic issue?</label>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="name"
+              >
+                Name:
+              </label>
               <input
-                type="checkbox"
-                id="diabetic"
-                name="diabetic"
-                checked={formData.diabetic}
-                onChange={handleCheckboxChange}
+                type="text"
+                placeholder="Enter Name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className="input-field"
+                required
               />
             </div>
-          </div>
-        )}
-      </div>
-
-      <div className="buttons-container mt-8">
-        {currentStep > 1 && (
-          <button
-            className="btn bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-4"
-            onClick={handlePrevious}
-          >
-            Previous
-          </button>
-        )}
-        {!loading && (
-          <button
-            className="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={handleNext}
-          >
-            {currentStep === 3 ? "Sign Up" : "Next"}
-          </button>
-        )}
-        {loading && (
-          <div className="mt-8">
-            <CircularProgressWithLabel value={0} />
-          </div>
-        )}
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="email"
+              >
+                Email:
+              </label>
+              <input
+                type="email"
+                placeholder="Enter Email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="input-field"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="password"
+              >
+                Password:
+              </label>
+              <input
+                type="password"
+                placeholder="Enter Password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className="input-field"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="phoneNumber"
+              >
+                Phone Number:
+              </label>
+              <input
+                type="text"
+                placeholder="Enter Phone Number"
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                className="input-field"
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="address"
+              >
+                Address:
+              </label>
+              <input
+                type="text"
+                placeholder="Enter Address"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                className="input-field"
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="city"
+              >
+                City:
+              </label>
+              <input
+                type="text"
+                placeholder="Enter City"
+                name="city"
+                value={formData.city}
+                onChange={handleChange}
+                className="input-field"
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="pincode"
+              >
+                Pincode:
+              </label>
+              <input
+                type="text"
+                placeholder="Enter Pincode"
+                name="pincode"
+                value={formData.pincode}
+                onChange={handleChange}
+                className="input-field"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Health Information:
+              </label>
+              <div className="mb-2">
+                <input
+                  type="checkbox"
+                  id="heartDisease"
+                  name="heartDisease"
+                  checked={formData.heartDisease}
+                  onChange={handleChange}
+                />
+                <label htmlFor="heartDisease" className="ml-2">
+                  Heart Disease
+                </label>
+              </div>
+              <div className="mb-2">
+                <input
+                  type="checkbox"
+                  id="hypertension"
+                  name="hypertension"
+                  checked={formData.hypertension}
+                  onChange={handleChange}
+                />
+                <label htmlFor="hypertension" className="ml-2">
+                  Hypertension
+                </label>
+              </div>
+              <div className="mb-2">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                  Allergies:
+                </label>
+                <input
+                  type="text"
+                  placeholder="Enter Allergies"
+                  name="allergies"
+                  value={formData.allergies}
+                  onChange={handleChange}
+                  className="input-field"
+                />
+              </div>
+              <div className="mb-2">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                  Diabetes:
+                </label>
+                <div>
+                  <input
+                    type="radio"
+                    id="diabetes-yes"
+                    name="diabetes"
+                    value="Yes"
+                    checked={formData.diabetes === "Yes"}
+                    onChange={handleChange}
+                  />
+                  <label htmlFor="diabetes-yes" className="ml-2">
+                    Yes
+                  </label>
+                </div>
+                <div>
+                  <input
+                    type="radio"
+                    id="diabetes-no"
+                    name="diabetes"
+                    value="No"
+                    checked={formData.diabetes === "No"}
+                    onChange={handleChange}
+                  />
+                  <label htmlFor="diabetes-no" className="ml-2">
+                    No
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center justify-center">
+              <button
+                className="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                onClick={handleSubmit}
+                disabled={loading}
+              >
+                {loading ? <CircularProgressWithLabel value={0} /> : "Sign Up"}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

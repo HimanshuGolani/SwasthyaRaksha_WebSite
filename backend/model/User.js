@@ -1,4 +1,3 @@
-// user.js
 import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
@@ -18,12 +17,7 @@ const userSchema = new Schema({
     required: true,
     minlength: 6,
   },
-  healthProfiles: [
-    {
-      type: mongoose.Types.ObjectId,
-      ref: "HealthProfile",
-    },
-  ],
+
   prescriptions: [
     {
       type: mongoose.Schema.Types.ObjectId,

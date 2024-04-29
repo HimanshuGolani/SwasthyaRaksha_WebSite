@@ -16,7 +16,7 @@ const labRSchema = new Schema({
     required: true,
   },
   user: {
-    type: mongoose.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },

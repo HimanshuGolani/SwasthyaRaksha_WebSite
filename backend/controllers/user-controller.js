@@ -50,12 +50,8 @@ export const signup = async (req, res, next) => {
     // Save user to database
     await user.save();
 
-    // Create a user object to send in response without the password field
-    const userToSend = { ...user.toObject() };
-    delete userToSend.password;
-
     // Return newly created user with 201 status
-    return res.status(201).json({ user: userToSend });
+    return res.status(201).json({ user });
   } catch (err) {
     // If error occurs, log error and return 500 status with message
     console.error(err);
@@ -113,10 +109,7 @@ export const searchUser = async (req, res) => {
       }
     : {};
 
-  const users = await User.find(
-    { ...reqUser },
-    { name: 1, email: 1, _id: 1, healthProfiles: 1 }
-  );
+  const users = await User.find({ ...reqUser }, { name: 1, email: 1, _id: 1 });
   res.send(users);
 };
 export const setAccessToInfo = async (req, res) => {

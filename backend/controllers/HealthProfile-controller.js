@@ -2,74 +2,66 @@ import User from "../model/User.js";
 import HealthProfile from "../model/HealthProfile.js";
 
 export const createHealthProfile = async (req, res) => {
-  try {
-    const {
-      user,
-      name,
-      age,
-      gender,
-      phoneNumber,
-      email,
-      heartDisease,
-      hypertension,
-      allergies,
-      diabetes,
-    } = req.body;
+  // get the data that to bde filed in the user's health profile
+  const {
+    userId,
+    email,
+    name,
+    age,
+    gender,
+    phoneNumber,
+    heartDisease,
+    hypertension,
+    allergies,
+    diabetes,
+  } = req.body;
 
-    console.log(req.body);
+  console.log(req.body);
 
-    // Create a new health profile
-    const healthProfile = new HealthProfile({
-      name,
-      age,
-      gender,
-      phoneNumber,
-      email,
-      heartDisease,
-      hypertension,
-      allergies,
-      diabetes,
-      user,
-    });
+  // Create a new health profile
+  const newHealthProfile = new HealthProfile({
+    email,
+    name,
+    age,
+    gender,
+    phoneNumber,
+    heartDisease,
+    hypertension,
+    allergies,
+    diabetes,
+  });
 
-    // Save the health profile
-    await healthProfile.save();
-    console.log(healthProfile);
-    // Update the user document with the health profile
-    const updatedUser = await User.findByIdAndUpdate(
-      user,
-      { $set: { healthProfile: healthProfile } },
-      { new: true }
-    ).populate("healthProfile");
+  // Save the new health profile
+  await newHealthProfile.save();
 
-    console.log(updatedUser);
+  console.log(newHealthProfile);
 
-    res.status(201).json({
-      success: true,
-      message: "Health profile created successfully",
-      user: updatedUser,
-    });
-  } catch (error) {
-    console.error("Error creating health profile:", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
-  }
+  // Find the user by ID and update its healthProfile field with the newly created health profile's ID
+  const updatedUser = await User.findByIdAndUpdate(
+    userId,
+    { healthProfile: newHealthProfile._id },
+    { new: true }
+  );
+  console.log(updatedUser);
+  res.send(updatedUser);
 };
 
 export const getHealthProfile = async (req, res) => {
   try {
-    console.log(req.params.id);
-    // Find the user by ID and populate the healthProfile field
-    const user = await User.findById(req.params.id);
+    const { userId } = req.params;
 
-    if (!user || !user.healthProfile) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Health profile not found" });
+    // Find the user by ID and populate its healthProfile field
+    const userWithHealthProfile = await User.findById(userId).populate(
+      "healthProfile"
+    );
+
+    if (!userWithHealthProfile) {
+      return res.status(404).send("User not found.");
     }
 
-    res.status(200).json({ success: true, healthProfile: user.healthProfile });
+    res.status(200).json(userWithHealthProfile.healthProfile);
   } catch (error) {
     console.error("Error getting health profile:", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    res.status(500).send("Error getting health profile.");
   }
 };

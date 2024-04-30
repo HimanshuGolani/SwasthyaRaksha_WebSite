@@ -6,7 +6,7 @@ import {
 
 const HealthPRouter = express.Router();
 
-HealthPRouter.get("/:id", getHealthProfile);
+HealthPRouter.get("/:userId", getHealthProfile);
 HealthPRouter.post("/create", createHealthProfile);
 
 export default HealthPRouter;

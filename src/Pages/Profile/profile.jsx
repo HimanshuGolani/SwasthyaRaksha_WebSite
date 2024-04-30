@@ -15,12 +15,12 @@ import { useState, useEffect } from "react";
 import axios, { formToJSON } from "axios";
 
 const Profile = () => {
-  const [expanded, setExpanded] = React.useState(false);
   const [profileData, setProfileData] = useState({});
 
   let userName = "";
   const getUserData = async () => {
     const id = localStorage.getItem("userId");
+    console.log(id);
     try {
       const response = await axios.get(
         `http://localhost:4500/api/healthprofiles/${id}`
@@ -28,7 +28,6 @@ const Profile = () => {
       const data = response.data;
       console.log(data);
 
-      userName = response.data.profileData.name;
       console.log(response.data);
       setProfileData(data);
     } catch (error) {

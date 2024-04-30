@@ -1,4 +1,3 @@
-// In getAllLabReports controller
 import LabReport from "../model/LabReport.js";
 import User from "../model/User.js";
 

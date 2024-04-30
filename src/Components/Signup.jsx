@@ -20,6 +20,8 @@ const SignupStepper = () => {
     hypertension: false,
     allergies: [],
     diabetes: "No",
+    gender: "",
+    age: "",
   });
   const [loading, setLoading] = useState(false);
   const navigator = useNavigate();
@@ -45,10 +47,9 @@ const SignupStepper = () => {
           password: formData.password,
         }
       );
-      console.log(response.data);
-      setUserId(response.data.user._id);
-      console.log(userId);
-      await createHealthProfile(userId);
+      console.log(response.data.user._id);
+
+      await createHealthProfile(response.data.user._id);
       toast.success("User created successfully!");
       navigator("/");
     } catch (error) {
@@ -62,11 +63,12 @@ const SignupStepper = () => {
   const createHealthProfile = async (userId) => {
     try {
       await axios.post("http://localhost:4500/api/healthprofiles/create", {
-        user: userId,
+        userId: userId,
+        name: formData.name,
+        email: formData.email,
+        age: formData.age,
+        gender: formData.gender,
         phoneNumber: formData.phoneNumber,
-        address: formData.address,
-        city: formData.city,
-        pincode: formData.pincode,
         heartDisease: formData.heartDisease,
         hypertension: formData.hypertension,
         allergies: formData.allergies,
@@ -212,6 +214,38 @@ const SignupStepper = () => {
                 placeholder="Enter Pincode"
                 name="pincode"
                 value={formData.pincode}
+                onChange={handleChange}
+                className="input-field"
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="gender"
+              >
+                Gender:
+              </label>
+              <input
+                type="text"
+                placeholder="Enter Gender"
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                className="input-field"
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="age"
+              >
+                Age:
+              </label>
+              <input
+                type="number"
+                placeholder="Enter Age"
+                name="age"
+                value={formData.age}
                 onChange={handleChange}
                 className="input-field"
               />

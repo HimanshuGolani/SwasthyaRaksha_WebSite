@@ -9,7 +9,7 @@ import Login from "./Components/Login";
 import UploadinReports from "./Components/UploadinReports";
 import UploadePrescription from "./Components/UploadePrescription";
 import Signup from "./Components/Signup";
-import HealthProfile from "./Pages/Profile/HealthProfile";
+// import HealthProfile from "./Pages/Profile/HealthProfile";
 function App() {
   return (
     <>
@@ -24,7 +24,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/uploadeR" element={<UploadinReports />} />
         <Route path="/uploadeP" element={<UploadePrescription />} />
-        <Route path="/HealthProfile" element={<HealthProfile />} />
+        {/* <Route path="/HealthProfile" element={<HealthProfile />} /> */}
       </Routes>
     </>
   );

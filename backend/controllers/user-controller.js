@@ -115,7 +115,10 @@ export const searchUser = async (req, res) => {
       }
     : {};
 
-  const users = await User.find({ ...reqUser }, { name: 1, email: 1, _id: 1 });
+  const users = await User.find(
+    { ...reqUser },
+    { name: 1, email: 1, _id: 1, healthProfile: 1 }
+  );
   res.send(users);
 };
 export const setAccessToInfo = async (req, res) => {
@@ -168,4 +171,38 @@ export const removeAccessToInfo = async (req, res) => {
     console.error("Error updating accessTo:", error);
     res.status(500).json({ error: "Error removing access" });
   }
+};
+
+// we will send back the array of objects that will have the name , email of the users
+
+export const fetchAccessUersDetails = async (req, res) => {
+  const { userId } = req.query;
+
+  // Find the user based on userId
+  const findUser = await User.findById(userId);
+
+  // If user not found, send 404 response
+  if (!findUser) {
+    return res.status(404).send({ message: "The user details not found" });
+  }
+
+  // Extract accessTo array from the found user
+  const { accessTo } = findUser;
+
+  // Create an empty array to store user details
+  let userDetails = [];
+
+  for (const id of accessTo) {
+    const fetchUser = await User.findById(id);
+
+    if (!fetchUser) {
+      continue;
+    }
+
+    const { name, email } = fetchUser;
+    userDetails.push({ name, email });
+  }
+
+  // Send userDetails array in the response
+  res.send(userDetails);
 };

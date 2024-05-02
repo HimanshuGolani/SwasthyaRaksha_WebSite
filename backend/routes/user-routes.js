@@ -6,6 +6,7 @@ import {
   searchUser,
   setAccessToInfo,
   removeAccessToInfo,
+  fetchAccessUersDetails,
 } from "../controllers/user-controller.js";
 
 const router = express.Router();
@@ -18,5 +19,7 @@ router.get("/searchUser", searchUser);
 router.post("/addAccess/", setAccessToInfo);
 // to remove the user form the access
 router.post("/removeAccess", removeAccessToInfo);
+
+router.get("/getAccessUsersInfo", fetchAccessUersDetails);
 
 export default router;

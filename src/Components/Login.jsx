@@ -33,7 +33,7 @@ const Login = () => {
       setuserEmail("");
       setPassword("");
       setLoading(false);
-      return response.data.id;
+      return response.data;
     } catch (error) {
       console.error("Login error:", error);
       setLoading(false);
@@ -42,11 +42,13 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
-    const userId = await loginReq();
-    if (userId) {
+    const data = await loginReq();
+    if (data) {
       toast.success("Login successful!", {
         onClose: () => {
-          localStorage.setItem("userId", userId);
+          localStorage.setItem("userId", data.id);
+          localStorage.setItem("userInfo", JSON.stringify(data.userData));
+
           dispatch(authActions.login());
           navigate("/");
         },

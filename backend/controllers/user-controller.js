@@ -1,3 +1,4 @@
+import { userInfo } from "os";
 import User from "../model/User.js";
 import bcrypt from "bcryptjs";
 
@@ -85,10 +86,15 @@ export const login = async (req, res, next) => {
       return res.status(400).json({ message: "Incorrect password" });
     }
 
+    const userToSend = existingUser;
+    userToSend.password = null;
+
     // If login successful, return 200 status with message and user ID
-    return res
-      .status(200)
-      .json({ message: "Login successful", id: existingUser._id });
+    return res.status(200).json({
+      message: "Login successful",
+      id: existingUser._id,
+      userData: userToSend,
+    });
   } catch (err) {
     // If error occurs, log error and return 500 status with message
     console.error(err);

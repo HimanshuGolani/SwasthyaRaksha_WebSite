@@ -9,7 +9,6 @@ import Login from "./Components/Login";
 import UploadinReports from "./Components/UploadinReports";
 import UploadePrescription from "./Components/UploadePrescription";
 import Signup from "./Components/Signup";
-// import HealthProfile from "./Pages/Profile/HealthProfile";
 function App() {
   return (
     <>

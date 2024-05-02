@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import profileImg from "../assets/images/profile-img.png";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../store/index";
+import UserProvider from "../Context/UserProvider";
 
 const NavBar = () => {
   const isAuth = useSelector((state) => state.isLoggedIn);
@@ -10,6 +11,10 @@ const NavBar = () => {
   const dispatch = useDispatch();
   const userStored = localStorage.getItem("userId");
   const navigator = useNavigate();
+
+  const userInfoString = localStorage.getItem("userInfo");
+
+  const { role } = JSON.parse(userInfoString);
 
   const logOut = () => {
     dispatch(authActions.logout());
@@ -55,6 +60,13 @@ const NavBar = () => {
               Appointment Reminder
             </Link>
 
+            {role === "Doctor" ? (
+              <Link to="/search" className="grow mt-2">
+                Search Users
+              </Link>
+            ) : (
+              <></>
+            )}
             <Link to="/profile">
               <img
                 src={profileImg}

@@ -9,6 +9,7 @@ import Login from "./Components/Login";
 import UploadinReports from "./Components/UploadinReports";
 import UploadePrescription from "./Components/UploadePrescription";
 import Signup from "./Components/Signup";
+import SearchUser from "./Components/SearchUser";
 function App() {
   return (
     <>
@@ -23,6 +24,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/uploadeR" element={<UploadinReports />} />
         <Route path="/uploadeP" element={<UploadePrescription />} />
+        <Route path="/search" element={<SearchUser />} />
         {/* <Route path="/HealthProfile" element={<HealthProfile />} /> */}
       </Routes>
     </>

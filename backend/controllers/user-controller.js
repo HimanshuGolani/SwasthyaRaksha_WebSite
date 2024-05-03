@@ -105,15 +105,17 @@ export const login = async (req, res, next) => {
 };
 
 export const searchUser = async (req, res) => {
-  console.log(req.query.search);
+  const { userId } = req.query;
+  const currentUser = await User.findById(userId);
   const reqUser = req.query.search
     ? {
+        _id: { $ne: currentUser._id },
         $or: [
           { name: { $regex: req.query.search, $options: "i" } },
           { email: { $regex: req.query.search, $options: "i" } },
         ],
       }
-    : {};
+    : { _id: { $ne: currentUser._id } };
 
   const users = await User.find(
     { ...reqUser },
@@ -121,6 +123,7 @@ export const searchUser = async (req, res) => {
   );
   res.send(users);
 };
+
 export const setAccessToInfo = async (req, res) => {
   const { userId, accessTo } = req.query;
   try {

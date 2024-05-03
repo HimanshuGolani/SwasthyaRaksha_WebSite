@@ -6,7 +6,7 @@ import labRrouter from "./routes/labR-routes.js";
 import HealthPRouter from "./routes/HealthP-router.js";
 import cors from "cors";
 import "dotenv/config";
-
+import MailRouter from "./routes/mail-router.js";
 // initiallizing instence of the app
 const app = express();
 
@@ -19,6 +19,7 @@ app.use("/api/user", router);
 app.use("/api/prescription", presRouter);
 app.use("/api/labR", labRrouter);
 app.use("/api/healthprofiles", HealthPRouter);
+app.use("/api/appoinmentreminder", MailRouter);
 
 // connecting to Db
 connectDataBase();

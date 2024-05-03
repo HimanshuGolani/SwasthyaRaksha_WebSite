@@ -6,35 +6,62 @@ const PrescriptionCard = ({
   HospitalName,
   DateOfReport,
 }) => {
-  const [enlarged, setEnlarged] = useState(false);
+  const [hovered, setHovered] = useState(false);
 
-  const handleImageClick = () => {
-    setEnlarged(!enlarged);
+  const handleDownload = () => {
+    axios
+      .get(prescUrl, { responseType: "blob" })
+      .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "report_image.jpg");
+        document.body.appendChild(link);
+        link.click();
+        window.URL.revokeObjectURL(url);
+      })
+      .catch((error) => {
+        console.error("Error downloading image:", error);
+      });
   };
 
   return (
-    <>
-      <div className="flex gap-5 justify-between px-4 py-2 mt-2 w-full bg-white leading-[150%] max-w-[960px] max-md:flex-wrap max-md:max-w-full">
-        <div className="flex gap-4 justify-between pr-20 max-md:flex-wrap max-md:max-w-full">
-          <img
-            src={prescUrl}
-            className={`w-20 aspect-square rounded shadow-lg hover:w-full h-auto ${
-              enlarged ? "enlarge" : ""
-            }`}
-            onClick={handleImageClick}
-          />
-          <div className="flex flex-col flex-1 justify-center my-auto">
-            <div className="text-base font-medium text-neutral-900">
-              {DoctorName}
-            </div>
-            <div className="text-sm whitespace-nowrap text-neutral-500">
-              {HospitalName}
-            </div>
+    <div
+      className="bg-white shadow-md rounded-md overflow-hidden mt-5"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <div className="relative">
+        <img src={prescUrl} alt="Report" className="w-full h-40 object-cover" />
+        {hovered && (
+          <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40">
+            <button
+              className="bg-blue-500 text-white font-bold py-1 px-3 rounded mr-2"
+              onClick={() => window.open(prescUrl, "_blank")}
+            >
+              View Fullscreen
+            </button>
+            <button
+              className="bg-green-500 text-white font-bold py-1 px-3 rounded"
+              onClick={handleDownload}
+            >
+              Download
+            </button>
           </div>
-        </div>
-        <div className="my-auto text-base text-neutral-900">{DateOfReport}</div>
+        )}
       </div>
-    </>
+      <div className="p-4">
+        <h3 className="text-lg font-semibold mb-2">
+          Name of Doctor : {DoctorName}
+        </h3>
+        <h3 className="text-lg font-semibold mb-2">
+          Name of the Hospital : {HospitalName}
+        </h3>
+        <h3 className="text-sm text-gray-600">
+          Date of Prescription : {DateOfReport}
+        </h3>
+      </div>
+    </div>
   );
 };
 

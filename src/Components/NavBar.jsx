@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import profileImg from "../assets/images/profile-img.png";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../store/index";
-import UserProvider from "../Context/UserProvider";
 
 const NavBar = () => {
   const isAuth = useSelector((state) => state.isLoggedIn);
@@ -65,7 +64,11 @@ const NavBar = () => {
                 Search Users
               </Link>
             ) : (
-              <></>
+              <>
+                <Link to="/setaccess" className="grow mt-2">
+                  Share You Info
+                </Link>
+              </>
             )}
             <Link to="/profile">
               <img

@@ -44,11 +44,6 @@ const LabReport = () => {
           </div>
         </div>
         <div className="flex flex-col p-px mt-6 w-full text-sm leading-5 bg-white rounded-xl border border-solid border-neutral-200 max-w-[928px] max-md:max-w-full">
-          <div className="flex gap-5 justify-between px-4 py-3.5 font-medium whitespace-nowrap bg-white max-md:flex-wrap max-md:max-w-full">
-            <div className="grow ml-8">Image</div>
-            <div className="grow">Report Name</div>
-            <div className="flex-auto">Date</div>
-          </div>
           {labReportData.map((labReport, index) => (
             <LabReportsCard
               key={index}

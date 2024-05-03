@@ -10,6 +10,9 @@ import UploadinReports from "./Components/UploadinReports";
 import UploadePrescription from "./Components/UploadePrescription";
 import Signup from "./Components/Signup";
 import SearchUser from "./Components/SearchUser";
+import SetUserAccess from "./Components/SetUserAccess";
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   return (
     <>
@@ -25,6 +28,7 @@ function App() {
         <Route path="/uploadeR" element={<UploadinReports />} />
         <Route path="/uploadeP" element={<UploadePrescription />} />
         <Route path="/search" element={<SearchUser />} />
+        <Route path="/setaccess" element={<SetUserAccess />} />
         {/* <Route path="/HealthProfile" element={<HealthProfile />} /> */}
       </Routes>
     </>

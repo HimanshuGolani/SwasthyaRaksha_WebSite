@@ -46,24 +46,23 @@ const Priscription = () => {
             </div>
           </div>
           <div className="mt-8 text-lg font-bold tracking-tight text-neutral-900 max-md:max-w-full">
-            Prescriptions
+            {prescriptions.length > 0 ? (
+              prescriptions.map((item, index) => (
+                <PrescriptionCard
+                  prescUrl={item.image}
+                  DoctorName={item.DoctorName}
+                  HospitalName={item.HospitalName}
+                  DateOfReport={item.prescDate}
+                  key={index}
+                />
+              ))
+            ) : (
+              <div className="flex justify-center align-center m-auto">
+                <h1>No prescriptions added yet please add </h1>
+              </div>
+            )}
           </div>
         </div>
-        {prescriptions.length > 0 ? (
-          prescriptions.map((item, index) => (
-            <PrescriptionCard
-              prescUrl={item.image}
-              DoctorName={item.DoctorName}
-              HospitalName={item.HospitalName}
-              DateOfReport={item.prescDate}
-              key={index}
-            />
-          ))
-        ) : (
-          <div className="flex justify-center align-center m-auto">
-            <h1>No prescriptions added yet please add </h1>
-          </div>
-        )}
       </div>
     </>
   );

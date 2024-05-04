@@ -1,5 +1,5 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
+import axios from "axios";
 
 const AppointmentReminder = () => {
   const [email, setEmail] = useState("");
@@ -24,88 +24,36 @@ const AppointmentReminder = () => {
     setReasonForVisit(e.target.value);
   };
 
-  const handleAppointmentDateChange = (date) => {
-    setAppointmentDate(date);
+  const handleAppointmentDateChange = (e) => {
+    setAppointmentDate(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add your submission logic here
-    console.log("Form submitted");
+    try {
+      await axios.post(
+        "http://localhost:4500/api/appoinmentreminder/setReminderMail",
+        {
+          email,
+          hospitalName,
+          doctorName,
+          reasonForVisit,
+          appointmentDate,
+        }
+      );
+      console.log("Reminder set successfully!");
+    } catch (error) {
+      console.error("Error occurred while setting reminder:", error);
+    }
   };
 
   return (
-    <div className="flex justify-center items-center  bg-gray-100">
+    <div className="flex justify-center items-center bg-gray-100">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
         <h3 className="text-xl font-semibold mb-4">
           Enter the details to get the email reminder
         </h3>
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="email-input" className="block mb-1">
-              Email address
-            </label>
-            <input
-              type="email"
-              id="email-input"
-              className="w-full border rounded-md px-3 py-2"
-              value={email}
-              onChange={handleEmailChange}
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="hospital-input" className="block mb-1">
-              Hospital Name
-            </label>
-            <input
-              type="text"
-              id="hospital-input"
-              className="w-full border rounded-md px-3 py-2"
-              value={hospitalName}
-              onChange={handleHospitalNameChange}
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="doctor-input" className="block mb-1">
-              Doctor Name
-            </label>
-            <input
-              type="text"
-              id="doctor-input"
-              className="w-full border rounded-md px-3 py-2"
-              value={doctorName}
-              onChange={handleDoctorNameChange}
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="reason-input" className="block mb-1">
-              Reason for Visit
-            </label>
-            <input
-              type="text"
-              id="reason-input"
-              className="w-full border rounded-md px-3 py-2"
-              value={reasonForVisit}
-              onChange={handleReasonForVisitChange}
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="date-input" className="block mb-1">
-              Appointment Date
-            </label>
-            <input
-              type="date"
-              id="date-input"
-              className="w-full border rounded-md px-3 py-2"
-              value={appointmentDate}
-              onChange={(e) => handleAppointmentDateChange(e.target.value)}
-              required
-            />
-          </div>
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"

@@ -18,7 +18,7 @@ router.get("/searchUser", searchUser);
 // add access to the info of the user to another user
 router.post("/addAccess/", setAccessToInfo);
 // to remove the user form the access
-router.post("/removeAccess", removeAccessToInfo);
+router.put("/removeAccess", removeAccessToInfo);
 
 router.get("/getAccessUsersInfo", fetchAccessUersDetails);
 

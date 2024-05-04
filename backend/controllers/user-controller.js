@@ -202,8 +202,8 @@ export const fetchAccessUersDetails = async (req, res) => {
       continue;
     }
 
-    const { name, email } = fetchUser;
-    userDetails.push({ name, email });
+    const { _id, name, email } = fetchUser;
+    userDetails.push({ _id, name, email });
   }
 
   // Send userDetails array in the response

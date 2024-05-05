@@ -3,7 +3,7 @@ import DateTime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../assets/Uploade.css";
+import "../../assets/Uploade.css";
 
 const UploadinReports = () => {
   const navigator = useNavigate();

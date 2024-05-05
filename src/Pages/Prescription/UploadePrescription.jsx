@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DateTime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
-import "../assets/Uploade.css";
+import "../../assets/Uploade.css";
 import axios from "axios";
 
 const UploadePrescription = () => {

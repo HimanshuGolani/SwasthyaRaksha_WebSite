@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import axios from "axios";
 
 const PrescriptionCard = ({
   prescUrl,
@@ -7,6 +8,7 @@ const PrescriptionCard = ({
   DateOfReport,
 }) => {
   const [hovered, setHovered] = useState(false);
+  const imageRef = useRef(null);
 
   const handleDownload = () => {
     axios
@@ -15,7 +17,7 @@ const PrescriptionCard = ({
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", "report_image.jpg");
+        link.setAttribute("download", "prescription_image.jpg");
         document.body.appendChild(link);
         link.click();
         window.URL.revokeObjectURL(url);
@@ -25,6 +27,28 @@ const PrescriptionCard = ({
       });
   };
 
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const lazyImage = entry.target;
+          lazyImage.src = prescUrl;
+          observer.unobserve(lazyImage);
+        }
+      });
+    });
+
+    if (imageRef.current) {
+      observer.observe(imageRef.current);
+    }
+
+    return () => {
+      if (imageRef.current) {
+        observer.unobserve(imageRef.current);
+      }
+    };
+  }, []);
+
   return (
     <div
       className="bg-white shadow-md rounded-md overflow-hidden mt-5"
@@ -32,7 +56,13 @@ const PrescriptionCard = ({
       onMouseLeave={() => setHovered(false)}
     >
       <div className="relative">
-        <img src={prescUrl} alt="Report" className="w-full h-40 object-cover" />
+        <img
+          ref={imageRef}
+          src=""
+          data-src={prescUrl}
+          alt="Report"
+          className="w-full h-40 object-cover"
+        />
         {hovered && (
           <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-40">
             <button

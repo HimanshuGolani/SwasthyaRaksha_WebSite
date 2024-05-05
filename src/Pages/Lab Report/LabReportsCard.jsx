@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
 const LabReportsCard = ({ ReportType, ReportDate, ReportImage }) => {
   const [hovered, setHovered] = useState(false);
+  const imageRef = useRef(null);
 
   const handleDownload = () => {
     axios
@@ -21,6 +22,28 @@ const LabReportsCard = ({ ReportType, ReportDate, ReportImage }) => {
       });
   };
 
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const lazyImage = entry.target;
+          lazyImage.src = lazyImage.dataset.src;
+          observer.unobserve(lazyImage);
+        }
+      });
+    });
+
+    if (imageRef.current) {
+      observer.observe(imageRef.current);
+    }
+
+    return () => {
+      if (imageRef.current) {
+        observer.unobserve(imageRef.current);
+      }
+    };
+  }, []);
+
   return (
     <div
       className="bg-white shadow-md rounded-md overflow-hidden mt-5"
@@ -29,7 +52,9 @@ const LabReportsCard = ({ ReportType, ReportDate, ReportImage }) => {
     >
       <div className="relative">
         <img
-          src={ReportImage}
+          ref={imageRef}
+          src=""
+          data-src={ReportImage}
           alt="Report"
           className="w-full h-40 object-cover"
         />

@@ -77,3 +77,18 @@ export const deleteLabReport = async (req, res, next) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+export const fetchLabReportById = async (id) => {
+  try {
+    const labReport = await LabReport.findById(id);
+    if (!labReport) {
+      return res.status(404).send({ message: "Lab report not found" });
+    }
+
+    console.log(labReport);
+
+    return labReport;
+  } catch (error) {
+    console.error(`Error occurred while fetching lab report:`, error);
+    res.status(500).send({ message: "Internal server error" });
+  }
+};

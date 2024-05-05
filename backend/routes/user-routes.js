@@ -7,6 +7,7 @@ import {
   setAccessToInfo,
   removeAccessToInfo,
   fetchAccessUersDetails,
+  fetchAccesForData,
 } from "../controllers/user-controller.js";
 
 const router = express.Router();
@@ -21,5 +22,7 @@ router.post("/addAccess/", setAccessToInfo);
 router.put("/removeAccess", removeAccessToInfo);
 
 router.get("/getAccessUsersInfo", fetchAccessUersDetails);
+
+router.get("/getAccessForData", fetchAccesForData);
 
 export default router;

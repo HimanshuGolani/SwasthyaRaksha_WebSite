@@ -6,11 +6,11 @@ import Priscription from "./Pages/Prescription/Priscription";
 import AppoinmentReminder from "./Pages/Appoinments-Reminder/AppoinmentReminder";
 import Profile from "./Pages/Profile/profile";
 import Login from "./Components/Login";
-import UploadinReports from "./Components/UploadinReports";
-import UploadePrescription from "./Components/UploadePrescription";
+import UploadinReports from "./Pages/Lab Report/UploadinReports";
+import UploadePrescription from "./Pages/Prescription/UploadePrescription";
 import Signup from "./Components/Signup";
-import SearchUser from "./Components/SearchUser";
-import SetUserAccess from "./Components/SetUserAccess";
+import SearchUser from "./Pages/SearchSection/SearchUser";
+import SetUserAccess from "./Pages/SearchSection/SetUserAccess";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {

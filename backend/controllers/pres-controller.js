@@ -120,3 +120,16 @@ export const getByUserId = async (req, res, next) => {
   }
   return res.status(200).json({ prescriptions: "userPres" });
 };
+
+export const fetchPrescriptionById = async (id) => {
+  try {
+    const prescription = await Prescription.findById(id);
+    if (!prescription) {
+      return res.status(404).send({ message: "Prescription not found" });
+    }
+    return prescription;
+  } catch (error) {
+    console.error(`Error occurred while fetching prescription:`, error);
+    res.status(500).send({ message: "Internal server error" });
+  }
+};

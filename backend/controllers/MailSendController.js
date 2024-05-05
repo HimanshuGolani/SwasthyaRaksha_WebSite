@@ -1,6 +1,16 @@
 import nodemailer from "nodemailer";
 import schedule from "node-schedule";
 
+// Create a transporter using Ethereal email service for testing purposes
+const transporter = nodemailer.createTransport({
+  host: "smtp.ethereal.email",
+  port: 587,
+  auth: {
+    user: "your_ethereal_username",
+    pass: "your_ethereal_password",
+  },
+});
+
 export const sendMail = async (req, res) => {
   const { email, hospitalName, doctorName, reasonForVisit, appointmentDate } =
     req.body;

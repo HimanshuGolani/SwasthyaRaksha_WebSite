@@ -1,6 +1,7 @@
-import { userInfo } from "os";
 import User from "../model/User.js";
 import bcrypt from "bcryptjs";
+import { fetchPrescriptionById } from "./pres-controller.js";
+import { fetchLabReportById } from "./labR-controller.js";
 
 // Controller to get all users
 export const getAllUsers = async (req, res, next) => {
@@ -208,4 +209,49 @@ export const fetchAccessUersDetails = async (req, res) => {
 
   // Send userDetails array in the response
   res.send(userDetails);
+};
+
+export const fetchAccesForData = async (req, res) => {
+  const { userId } = req.query;
+  try {
+    const findUser = await User.findById(userId);
+
+    if (!findUser) {
+      return res.status(404).send({ message: "User not found" });
+    }
+
+    const listOfIds = findUser.accessFor;
+    const dataList = [];
+
+    for (const id of listOfIds) {
+      const udata = await User.findById(id);
+      if (!udata) {
+        console.log(`User with ID ${id} not found`);
+        continue;
+      }
+
+      const { _id, name, email, prescriptions, labReports } = udata;
+
+      const allPrescD = [];
+
+      for (const id of prescriptions) {
+        const presc = await fetchPrescriptionById(id);
+        allPrescD.push(presc);
+      }
+
+      const allLabR = [];
+
+      for (const id of labReports) {
+        const labrc = await fetchLabReportById(id);
+        allLabR.push(labrc);
+      }
+
+      dataList.push({ _id, name, email, allPrescD, allLabR });
+    }
+
+    res.send(dataList);
+  } catch (error) {
+    console.error(`Error occurred while fetching user data:`, error);
+    res.status(500).send({ message: "Internal server error" });
+  }
 };

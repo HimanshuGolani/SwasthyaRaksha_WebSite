@@ -1,20 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import LabReportsCard from "../../Components/LabReportsCard";
+import LabReportsCard from "./LabReportsCard";
 import axios from "axios";
+import CircularProgress from "@mui/material/CircularProgress";
+
+const LoadingSpinner = () => (
+  <div className="m-auto flex justify-center items-center h-32">
+    <CircularProgress color="primary" size={64} thickness={4} />
+  </div>
+);
 
 const LabReport = () => {
   const [labReportData, setLabReportData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const id = localStorage.getItem("userId");
+
   const getLabR = async () => {
-    const response = await axios.get(`http://localhost:4500/api/labR/${id}`);
-    console.log(response.data.labReport);
-    setLabReportData(response.data.labReport.labReports);
+    try {
+      const response = await axios.get(`http://localhost:4500/api/labR/${id}`);
+      console.log(response.data.labReport);
+      setLabReportData(response.data.labReport.labReports);
+    } catch (error) {
+      console.error("Error fetching lab reports:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     getLabR();
   }, []);
+
   return (
     <>
       <div className="flex flex-col items-center pb-12 bg-white text-neutral-900">
@@ -44,14 +61,18 @@ const LabReport = () => {
           </div>
         </div>
         <div className="flex flex-col p-px mt-6 w-full text-sm leading-5 bg-white rounded-xl border border-solid border-neutral-200 max-w-[928px] max-md:max-w-full">
-          {labReportData.map((labReport, index) => (
-            <LabReportsCard
-              key={index}
-              ReportImage={labReport.image}
-              ReportType={labReport.ReportName}
-              ReportDate={labReport.ReportDate}
-            />
-          ))}
+          {loading ? (
+            <LoadingSpinner />
+          ) : (
+            labReportData.map((labReport, index) => (
+              <LabReportsCard
+                key={index}
+                ReportImage={labReport.image}
+                ReportType={labReport.ReportName}
+                ReportDate={labReport.ReportDate}
+              />
+            ))
+          )}
         </div>
       </div>
     </>

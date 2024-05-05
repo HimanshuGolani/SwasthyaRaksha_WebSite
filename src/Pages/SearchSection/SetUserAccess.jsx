@@ -1,20 +1,26 @@
 import React, { useState } from "react";
-import { Button, Input } from "@mui/material";
+import { Button, Input, CircularProgress } from "@mui/material";
 import axios from "axios";
-import UserCard from "./UserCard";
-import UserAccessCard from "./UserAccessCard";
+import UserCard from "../../Components/UserCard";
+import UserAccessCard from "../../Components/UserAccessCard";
+
+const LoadingSpinner = () => (
+  <div className="flex justify-center items-center mt-4">
+    <CircularProgress color="primary" />
+  </div>
+);
 
 const SetUserAccess = () => {
   const [search, setSearch] = useState("");
   const [error, setError] = useState(null);
   const [result, setResult] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const { _id } = JSON.parse(localStorage.getItem("userInfo"));
 
-  console.log(_id);
-
   const searchUser = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(
         `http://localhost:4500/api/user/searchUser/?search=${search}&userId=${_id}`
       );
@@ -24,6 +30,8 @@ const SetUserAccess = () => {
       console.error("Error fetching user:", error);
       setError("Error fetching user. Please try again later.");
       setResult([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -43,6 +51,7 @@ const SetUserAccess = () => {
           </div>
         </div>
       </div>
+      {loading && <LoadingSpinner />}{" "}
       {error && <p className="text-red-500">{error}</p>}
       {result.length === 0 ? (
         <></>

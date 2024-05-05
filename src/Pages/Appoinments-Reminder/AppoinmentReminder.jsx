@@ -48,12 +48,97 @@ const AppointmentReminder = () => {
   };
 
   return (
-    <div className="flex justify-center items-center bg-gray-100">
+    <div className="flex justify-center items-center bg-gray-100 h-screen">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
         <h3 className="text-xl font-semibold mb-4">
           Enter the details to get the email reminder
         </h3>
         <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={email}
+              onChange={handleEmailChange}
+              className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="hospital"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Hospital Name
+            </label>
+            <input
+              type="text"
+              id="hospital"
+              name="hospital"
+              value={hospitalName}
+              onChange={handleHospitalNameChange}
+              className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="doctor"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Doctor Name
+            </label>
+            <input
+              type="text"
+              id="doctor"
+              name="doctor"
+              value={doctorName}
+              onChange={handleDoctorNameChange}
+              className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="reason"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Reason for Visit
+            </label>
+            <input
+              type="text"
+              id="reason"
+              name="reason"
+              value={reasonForVisit}
+              onChange={handleReasonForVisitChange}
+              className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="date"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Appointment Date
+            </label>
+            <input
+              type="date"
+              id="date"
+              name="date"
+              value={appointmentDate}
+              onChange={handleAppointmentDateChange}
+              className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              required
+            />
+          </div>
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"

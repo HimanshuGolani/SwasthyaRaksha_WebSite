@@ -13,7 +13,9 @@ const NavBar = () => {
 
   const userInfoString = localStorage.getItem("userInfo");
 
-  const { role } = JSON.parse(userInfoString);
+  if (userInfoString) {
+    var { role } = JSON.parse(userInfoString);
+  }
 
   const logOut = () => {
     dispatch(authActions.logout());

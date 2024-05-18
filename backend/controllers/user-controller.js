@@ -108,9 +108,10 @@ export const login = async (req, res, next) => {
 export const searchUser = async (req, res) => {
   const { userId } = req.query;
   const currentUser = await User.findById(userId);
+  // console.log(`userId , currentUser._id`, userId, currentUser);
   const reqUser = req.query.search
     ? {
-        _id: { $ne: currentUser._id },
+        _id: { $ne: currentUser },
         $or: [
           { name: { $regex: req.query.search, $options: "i" } },
           { email: { $regex: req.query.search, $options: "i" } },

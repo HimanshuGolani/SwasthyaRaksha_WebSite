@@ -62,9 +62,15 @@ const NavBar = () => {
             </Link>
 
             {role === "Doctor" ? (
-              <Link to="/search" className="grow mt-2">
-                Search Users
-              </Link>
+              <>
+                {" "}
+                <Link to="/search" className="grow mt-2">
+                  Search Users
+                </Link>
+                <Link to="/setaccess" className="grow mt-2">
+                  Share You Info
+                </Link>
+              </>
             ) : (
               <>
                 <Link to="/setaccess" className="grow mt-2">

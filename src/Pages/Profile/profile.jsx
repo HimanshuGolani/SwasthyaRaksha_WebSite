@@ -24,6 +24,7 @@ const Profile = () => {
         `http://localhost:4500/api/healthprofiles/${id}`
       );
       setProfileData(response.data);
+      console.log(`response.data`, response);
     } catch (error) {
       console.log(error);
     }
@@ -79,7 +80,7 @@ const Profile = () => {
           <div className="flex items-center mb-6">
             <div className="w-12 h-12 bg-red-500 rounded-full flex justify-center items-center">
               <span className="text-white font-bold text-lg">
-                {profileData?.name[0]}
+                {profileData ? profileData.name[0] : ""}
               </span>
             </div>
             <div className="ml-4">
@@ -102,7 +103,7 @@ const Profile = () => {
             <p className="text-base text-gray-700">
               <strong>Phone Number:</strong> {profileData?.phoneNumber}
             </p>
-            <p className="text-base text-gray-700">
+            <div className="text-base text-gray-700">
               <strong>Allergies:</strong>{" "}
               {profileData?.allergies && profileData.allergies.length > 0 ? (
                 <ul>
@@ -113,7 +114,7 @@ const Profile = () => {
               ) : (
                 "None"
               )}
-            </p>
+            </div>
           </div>
         </div>
       )}

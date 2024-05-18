@@ -20,7 +20,7 @@ const UploadePrescription = () => {
       `http://localhost:4500/api/prescription/add`,
       {
         DoctorName: prescriptionData.doctorName,
-        HospitalName: prescriptionData.doctorName,
+        HospitalName: prescriptionData.hospitalName,
         image: prescriptionData.prescriptionImg,
         prescDate: prescriptionData.dateOfPrescription,
         user: localStorage.getItem("userId"),

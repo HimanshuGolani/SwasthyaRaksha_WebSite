@@ -20,7 +20,7 @@ export const sendMail = async (req, res) => {
     schedule.scheduleJob(scheduledDate, async () => {
       try {
         let info = await transporter.sendMail({
-          from: '"Maddison Foo Koch 👻" <maddison53@ethereal.email>',
+          from: '"HEalthTracker_Reminder" <maddison53@ethereal.email>',
           to: email,
           subject: `Appointment Reminder: ${hospitalName} with Dr. ${doctorName}`,
           text: `You have an appointment at ${hospitalName} with Dr. ${doctorName} for ${reasonForVisit} on ${appointmentDate}.`,

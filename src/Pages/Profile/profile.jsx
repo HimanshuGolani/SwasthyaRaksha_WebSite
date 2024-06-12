@@ -3,6 +3,7 @@ import axios from "axios";
 import AccessToUserCard from "./AccessToUserCard";
 import PatientCard from "./PatientCard";
 import CircularProgress from "@mui/material/CircularProgress";
+import ViewList from "../../Components/ViewList";
 
 const LoadingSpinner = () => (
   <div className="flex justify-center items-center mt-8">
@@ -14,9 +15,41 @@ const Profile = () => {
   const [profileData, setProfileData] = useState(null);
   const [accessTo, setAccessTo] = useState([]);
   const [listData, setListData] = useState([]);
-  const [loading, setLoading] = useState(true); // Initially set loading to true
+  const [loading, setLoading] = useState(true);
+  const [viewedData, setViewedData] = useState([]);
+  const getViewedData = async () => {
+    try {
+      const id = localStorage.getItem("userId");
+      setLoading(true);
+      const response = await axios.get(
+        `http://localhost:4500/api/healthprofiles/getProfileViewLogs?userId=${id}`
+      );
 
-  // gets health profile of the user
+      console.log("response logs ====================================");
+      console.log(response.data.logs);
+      console.log("====================================");
+
+      if (response.data.logs) {
+        const logsArray = Object.entries(response.data.logs).map(
+          ([userId, log]) => ({
+            userId,
+            name: log.name,
+            email: log.email,
+            viewedDates: log.viewedDate,
+          })
+        );
+
+        console.log("The logs array", logsArray);
+        setViewedData(logsArray);
+      } else {
+        console.error("No logs found in the response");
+      }
+    } catch (error) {
+      console.error("Error fetching viewed data:", error);
+    } finally {
+      setLoading(false);
+    }
+  }; // gets health profile of the user
   const getUserData = async () => {
     const id = localStorage.getItem("userId");
     try {
@@ -38,6 +71,7 @@ const Profile = () => {
       const response = await axios.get(
         `http://localhost:4500/api/user/getAccessUsersInfo?userId=${id}`
       );
+      console.log("The access to is :", response.data);
       setAccessTo(response.data);
     } catch (error) {
       console.log(error);
@@ -56,7 +90,7 @@ const Profile = () => {
     } catch (error) {
       console.log(error);
     } finally {
-      setLoading(false); // Set loading to false after fetching data
+      setLoading(false);
     }
   };
 
@@ -64,6 +98,7 @@ const Profile = () => {
     getAccessTo();
     getUserData();
     getForData();
+    getViewedData();
   }, []);
 
   return (
@@ -71,10 +106,9 @@ const Profile = () => {
       <h1 className="text-center text-4xl font-bold mb-8 text-gray-800 font-serif">
         Your Health Profile
       </h1>
-
       {/* Profile Card Section */}
       {loading ? (
-        <LoadingSpinner /> // Show loading spinner while loading
+        <LoadingSpinner />
       ) : (
         <div className="bg-gray-100 shadow-lg rounded-lg p-8 mb-8">
           <div className="flex items-center mb-6">
@@ -118,25 +152,34 @@ const Profile = () => {
           </div>
         </div>
       )}
-
       {/* Access List Section */}
       {loading ? null : (
         <div className="bg-gray-100 shadow-lg rounded-lg p-8 mb-8">
           <h1 className="text-center text-4xl font-bold mb-8 text-gray-800 font-serif">
             Users with Access to Your Data
           </h1>
-          {accessTo.map((user, index) => (
-            <AccessToUserCard
-              name={user.name}
-              email={user.email}
-              symbolInButton={"Remove"}
-              cuserId={user._id}
-              key={index}
-            />
-          ))}
+          {accessTo.length > 0 ? (
+            <>
+              {accessTo.map((user, index) => (
+                <AccessToUserCard
+                  name={user.name}
+                  email={user.email}
+                  symbolInButton={"Remove"}
+                  cuserId={user._id}
+                  key={index}
+                />
+              ))}
+            </>
+          ) : (
+            <>
+              {" "}
+              <p className="text-center text-gray-700">
+                You have not given access to anyone.
+              </p>
+            </>
+          )}
         </div>
       )}
-
       {/* Users Data List Section */}
       {loading ? null : (
         <div className="bg-gray-100 shadow-lg rounded-lg p-8">
@@ -158,6 +201,25 @@ const Profile = () => {
           ) : (
             <p className="text-center text-gray-700">
               You don't have access to any user's data.
+            </p>
+          )}
+        </div>
+      )}
+      {/* The List of people viewed your profile and when they viewed it . */}
+      {loading ? null : (
+        <div className="bg-gray-100 shadow-lg rounded-lg p-8 mt-10 mb-10">
+          <h1 className="text-center text-4xl font-bold mb-8 text-gray-800 font-serif">
+            Who Viewed Your Data?
+          </h1>
+          {viewedData.length > 0 ? (
+            <>
+              {viewedData.map((item, index) => (
+                <ViewList key={index} viewedData={item} />
+              ))}
+            </>
+          ) : (
+            <p className="text-center text-gray-700">
+              No one has viewed your data yet.
             </p>
           )}
         </div>

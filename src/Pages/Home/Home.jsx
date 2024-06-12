@@ -29,7 +29,7 @@ const Home = () => {
     <div className="flex flex-col items-center pb-5 bg-white">
       <div className="flex flex-col justify-center px-10 pt-12 pb-6 max-w-full w-[781px] max-md:px-5">
         <div className="text-center md:text-green-600 text-5xl font-extrabold tracking-tighter max-md:mt-10 max-md:max-w-full max-md:text-3xl">
-          Welcome to Health Tracker
+          Welcome to Swasthya Raksha
         </div>
         <div className="mt-2 text-lg rounded md:text-black-600 leading-[150%] max-md:max-w-full">
           Your personal health dashboard for tracking your health data and

@@ -1,10 +1,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const UserContext = createContext();
+const AppContext = createContext();
 
 const UserProvider = ({ children }) => {
-  const [user, setUser] = useState("");
+  const [userId, setUserId] = useState("");
+  const [healthProfile, setHealthProfile] = useState("");
+  const [isAuth, setIsAuth] = useState(false);
 
   const navigate = useNavigate();
 
@@ -17,14 +19,23 @@ const UserProvider = ({ children }) => {
   }, [user]);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <AppContext.Provider
+      value={{
+        userId,
+        setUserId,
+        healthProfile,
+        setHealthProfile,
+        isAuth,
+        setIsAuth,
+      }}
+    >
       {children}
-    </UserContext.Provider>
+    </AppContext.Provider>
   );
 };
 
-export const useUserState = () => {
-  return useContext(UserContext);
+export const useAppState = () => {
+  return useContext(AppContext);
 };
 
 export default UserProvider;

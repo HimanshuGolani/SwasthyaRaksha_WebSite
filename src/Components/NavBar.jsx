@@ -32,7 +32,7 @@ const NavBar = () => {
             className="my-auto w-4 aspect-square"
             alt="Logo"
           />
-          <div className="flex-auto">Health Tracker</div>
+          <div className="flex-auto">SwasthyaRaksha</div>
         </Link>
       </div>
       <div className="flex gap-5 max-md:flex-wrap max-md:max-w-full">

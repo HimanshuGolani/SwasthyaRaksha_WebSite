@@ -43,9 +43,14 @@ const Login = () => {
 
   const handleLogin = async () => {
     const data = await loginReq();
+    console.log("====================================");
+    console.log(data.userData.name);
+    console.log("====================================");
     if (data) {
       toast.success("Login successful!", {
         onClose: () => {
+          localStorage.setItem("userName", data.userData.name);
+          localStorage.setItem("userEmail", data.userData.email);
           localStorage.setItem("userId", data.id);
           localStorage.setItem("userInfo", JSON.stringify(data.userData));
 

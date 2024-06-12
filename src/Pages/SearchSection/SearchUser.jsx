@@ -28,6 +28,9 @@ const SearchUser = () => {
         `http://localhost:4500/api/user/searchUser/?search=${search}&userId=${id}`
       );
       setResult(response.data);
+      console.log("====================================");
+      console.log("The response data is : ", response.data);
+      console.log("====================================");
       setError(null);
     } catch (error) {
       console.error("Error fetching user:", error);
@@ -74,7 +77,11 @@ const SearchUser = () => {
       {result.length > 0 && (
         <div className="m-auto flex justify-center align-center flex-col">
           {result.map((item) => (
-            <UserCard key={item._id} user={item} />
+            <UserCard
+              key={item._id}
+              healthProfileId={item.healthProfile}
+              user={item}
+            />
           ))}
         </div>
       )}

@@ -12,7 +12,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import axios from "axios";
 import { Avatar, Box } from "@mui/material";
 
-const UserCard = ({ user }) => {
+const UserCard = ({ user, healthProfileId }) => {
   const { _id } = user;
   const [expanded, setExpanded] = useState(false);
   const [healthProfile, setHealthProfile] = useState(null);
@@ -48,6 +48,26 @@ const UserCard = ({ user }) => {
     return <Typography variant="body1">{error}</Typography>;
   }
 
+  const addUserDateTime = async () => {
+    try {
+      const userId = localStorage.getItem("userId");
+      const name = localStorage.getItem("userName");
+      const email = localStorage.getItem("userEmail");
+
+      console.log("====================================");
+      console.log(userId, name, email, healthProfileId);
+      console.log("====================================");
+
+      const response = await axios.post(
+        `http://localhost:4500/api/healthprofiles/whoViewdProfile/?userId=${userId}&name=${name}&email=${email}&healthProfileId=${healthProfileId}`
+      );
+
+      console.log(response.data.message);
+    } catch (error) {
+      console.error("Error logging profile view:", error);
+    }
+  };
+
   return (
     <Box mx="auto" my={2} width="100%" maxWidth={345}>
       <Card>
@@ -73,7 +93,10 @@ const UserCard = ({ user }) => {
         <CardActions disableSpacing>
           <ExpandMore
             expand={expanded}
-            onClick={() => setExpanded(!expanded)}
+            onClick={() => {
+              setExpanded(!expanded);
+              addUserDateTime();
+            }}
             aria-expanded={expanded}
             aria-label="show more"
           >

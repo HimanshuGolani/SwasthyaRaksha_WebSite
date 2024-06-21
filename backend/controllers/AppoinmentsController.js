@@ -13,6 +13,36 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// Function to send email reminder
+const sendAppointmentReminder = async (
+  email,
+  hospitalName,
+  doctorName,
+  reasonForVisit,
+  appointmentDate
+) => {
+  try {
+    const scheduledDate = new Date(appointmentDate + "T08:00:00");
+    schedule.scheduleJob(scheduledDate, async () => {
+      try {
+        let info = await transporter.sendMail({
+          from: '"HealthTracker_Reminder" <maddison53@ethereal.email>',
+          to: email,
+          subject: `Appointment Reminder: ${hospitalName} with Dr. ${doctorName}`,
+          text: `You have an appointment at ${hospitalName} with Dr. ${doctorName} for ${reasonForVisit} on ${appointmentDate}.`,
+          html: `<p>You have an appointment at ${hospitalName} with Dr. ${doctorName} for ${reasonForVisit} on ${appointmentDate}.</p>`,
+        });
+
+        console.log("Message sent: %s", info.messageId);
+      } catch (error) {
+        console.error("Error occurred while sending email:", error);
+      }
+    });
+  } catch (error) {
+    console.error("Error occurred while scheduling reminder:", error);
+  }
+};
+
 export const createAppointments = async (req, res) => {
   const { email, hospitalName, doctorName, reasonForVisit, appointmentDate } =
     req.body;
@@ -40,8 +70,17 @@ export const createAppointments = async (req, res) => {
     user.Appointments.push(newAppointment._id);
     await user.save();
 
+    // Schedule the email reminder
+    await sendAppointmentReminder(
+      email,
+      hospitalName,
+      doctorName,
+      reasonForVisit,
+      appointmentDate
+    );
+
     res.status(200).send({
-      message: "Appointment created successfully.",
+      message: "Appointment created and reminder scheduled successfully.",
       appointment: newAppointment,
       success: true,
     });
@@ -55,10 +94,12 @@ export const createAppointments = async (req, res) => {
 };
 
 export const getAppointments = async (req, res) => {
-  const { userId } = req.params;
+  const { id } = req.params;
+  console.log(id);
 
   try {
-    const user = await User.findById(userId).populate("Appointments");
+    const user = await User.findById(id).populate("Appointments");
+    console.log(user);
     // If the user does not exist
     if (!user) {
       return res.status(404).send({
@@ -74,37 +115,5 @@ export const getAppointments = async (req, res) => {
       message: "An error occurred while retrieving appointments.",
       success: false,
     });
-  }
-};
-
-export const sendMail = async (req, res) => {
-  const { email, hospitalName, doctorName, reasonForVisit, appointmentDate } =
-    req.body;
-
-  try {
-    // Schedule the email to be sent at the appointment date and time
-    const scheduledDate = new Date(appointmentDate + "T08:00:00");
-    schedule.scheduleJob(scheduledDate, async () => {
-      try {
-        let info = await transporter.sendMail({
-          from: '"HealthTracker_Reminder" <maddison53@ethereal.email>',
-          to: email,
-          subject: `Appointment Reminder: ${hospitalName} with Dr. ${doctorName}`,
-          text: `You have an appointment at ${hospitalName} with Dr. ${doctorName} for ${reasonForVisit} on ${appointmentDate}.`,
-          html: `<p>You have an appointment at ${hospitalName} with Dr. ${doctorName} for ${reasonForVisit} on ${appointmentDate}.</p>`,
-        });
-
-        console.log("Message sent: %s", info.messageId);
-      } catch (error) {
-        console.error("Error occurred while sending email:", error);
-      }
-    });
-
-    res.status(200).json({ message: "Reminder scheduled successfully!" });
-  } catch (error) {
-    console.error("Error occurred while scheduling reminder:", error);
-    res
-      .status(500)
-      .json({ error: "An error occurred while scheduling the reminder." });
   }
 };

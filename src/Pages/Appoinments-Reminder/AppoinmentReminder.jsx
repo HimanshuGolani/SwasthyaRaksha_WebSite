@@ -135,7 +135,7 @@ const AppointmentReminder = () => {
                       name={name}
                       value={formData[name]}
                       onChange={handleChange}
-                      className="mt-1 border-black block w-full rounded-md h-8 px-3 shadow-sm sm:text-sm focus:ring-blue-500 focus:border-blue-500"
+                      className="mt-1 border border-black block w-full rounded-md h-8 px-3 shadow-sm sm:text-sm focus:ring-blue-500 focus:border-blue-500"
                       required
                     />
                   </div>

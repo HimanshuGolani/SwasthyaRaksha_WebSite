@@ -95,7 +95,9 @@ const UserCard = ({ user, healthProfileId }) => {
             expand={expanded}
             onClick={() => {
               setExpanded(!expanded);
-              addUserDateTime();
+              if (expanded) {
+                addUserDateTime();
+              }
             }}
             aria-expanded={expanded}
             aria-label="show more"

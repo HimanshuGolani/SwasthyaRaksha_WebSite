@@ -32,7 +32,7 @@ const AppointmentReminder = () => {
     e.preventDefault();
     try {
       await axios.post(
-        "http://localhost:4500/api/appoinmentreminder/setReminderMail",
+        "http://localhost:4500/api/appoinmnets/setReminderMail",
         {
           email,
           hospitalName,

@@ -33,10 +33,12 @@ const AppointmentReminder = () => {
   const fetchAppointments = async () => {
     setLoadingAppointments(true);
     try {
+      const id = localStorage.getItem("userId");
       const response = await axios.get(
-        "http://localhost:4500/api/appointments"
+        `http://localhost:4500/api/appointments/${id}`
       );
-      setAppointments(response.data);
+      console.log("the reminders are : ", response.data.Appointments);
+      setAppointments(response.data.Appointments);
       setError("");
     } catch (error) {
       console.error("Error occurred while fetching appointments:", error);
@@ -51,12 +53,12 @@ const AppointmentReminder = () => {
     setIsSubmitting(true);
     try {
       const response = await axios.post(
-        "http://localhost:4500/api/appointments/setReminderMail",
+        "http://localhost:4500/api/appointments/create",
         formData
       );
       setMessage("Reminder set successfully!");
       console.log("Reminder set successfully!", response.data);
-      await fetchAppointments(); // Refresh appointments after setting reminder
+      await fetchAppointments();
       setCurrentStep("viewAppointments");
     } catch (error) {
       setMessage("Error occurred while setting reminder.");
@@ -69,6 +71,14 @@ const AppointmentReminder = () => {
   const handleBackToChoices = () => {
     setMessage("");
     setCurrentStep(null);
+  };
+
+  const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}T00:00`;
   };
 
   return (
@@ -104,7 +114,7 @@ const AppointmentReminder = () => {
               </h2>
               <form onSubmit={handleSubmit} className="space-y-4">
                 {[
-                  { label: "Email", name: "email", type: "email" },
+                  { label: "Enter your Email", name: "email", type: "email" },
                   {
                     label: "Hospital Name",
                     name: "hospitalName",
@@ -120,12 +130,13 @@ const AppointmentReminder = () => {
                     label: "Appointment Date",
                     name: "appointmentDate",
                     type: "datetime-local",
+                    min: getCurrentDate(),
                   },
-                ].map(({ label, name, type }) => (
+                ].map(({ label, name, type, min }) => (
                   <div key={name}>
                     <label
                       htmlFor={name}
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-l font-medium text-gray-700"
                     >
                       {label}
                     </label>
@@ -133,10 +144,12 @@ const AppointmentReminder = () => {
                       type={type}
                       id={name}
                       name={name}
+                      placeholder={label}
                       value={formData[name]}
                       onChange={handleChange}
                       className="mt-1 border border-black block w-full rounded-md h-8 px-3 shadow-sm sm:text-sm focus:ring-blue-500 focus:border-blue-500"
                       required
+                      min={min}
                     />
                   </div>
                 ))}

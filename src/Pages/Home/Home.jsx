@@ -25,6 +25,7 @@ const Home = () => {
         "Our app will remind you about upcoming appointments. Get reminded before 24hr and 3hr before the appoinment. You can also add or remove them at any time. ",
     },
   ];
+
   return (
     <div className="flex flex-col items-center pb-5 bg-white">
       <div className="flex flex-col justify-center px-10 pt-12 pb-6 max-w-full w-[781px] max-md:px-5">

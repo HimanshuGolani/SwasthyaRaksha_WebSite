@@ -72,7 +72,7 @@ const Login = () => {
             <div className="form-heading">
               <h1 className="">Login</h1>
             </div>
-            <div className="form-inputs">
+            <div className="">
               <input
                 type="text"
                 placeholder="Enter Email"

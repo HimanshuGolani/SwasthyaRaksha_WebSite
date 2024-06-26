@@ -62,7 +62,7 @@ const UserCard = ({ user, healthProfileId }) => {
         `http://localhost:4500/api/healthprofiles/whoViewdProfile/?userId=${userId}&name=${name}&email=${email}&healthProfileId=${healthProfileId}`
       );
 
-      console.log(response.data.message);
+      console.log(response.data);
     } catch (error) {
       console.error("Error logging profile view:", error);
     }

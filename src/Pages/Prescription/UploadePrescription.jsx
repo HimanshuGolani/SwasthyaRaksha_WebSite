@@ -17,7 +17,7 @@ const UploadePrescription = () => {
 
   const addPrescription = async () => {
     const response = await axios.post(
-      `http://localhost:4500/api/prescription/add`,
+      `https://swasthyaraksha-backend.onrender.com/api/prescription/add`,
       {
         DoctorName: prescriptionData.doctorName,
         HospitalName: prescriptionData.hospitalName,

@@ -18,7 +18,9 @@ const LabReport = () => {
 
   const getLabR = async () => {
     try {
-      const response = await axios.get(`http://localhost:4500/api/labR/${id}`);
+      const response = await axios.get(
+        `https://swasthyaraksha-backend.onrender.com/api/labR/${id}`
+      );
       console.log(response.data.labReport);
       setLabReportData(response.data.labReport.labReports);
     } catch (error) {

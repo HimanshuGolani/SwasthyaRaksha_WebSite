@@ -25,12 +25,10 @@ const SearchUser = () => {
     try {
       const id = localStorage.getItem("userId");
       const response = await axios.get(
-        `http://localhost:4500/api/user/searchUser/?search=${search}&userId=${id}`
+        `https://swasthyaraksha-backend.onrender.com/api/user/searchUser/?search=${search}&userId=${id}`
       );
       setResult(response.data);
-      console.log("====================================");
-      console.log("The response data is : ", response.data);
-      console.log("====================================");
+
       setError(null);
     } catch (error) {
       console.error("Error fetching user:", error);

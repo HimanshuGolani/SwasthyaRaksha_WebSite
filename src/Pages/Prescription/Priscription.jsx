@@ -18,10 +18,9 @@ const Prescription = () => {
     try {
       const id = localStorage.getItem("userId");
       const response = await axios.get(
-        `http://localhost:4500/api/prescription/${id}`
+        `https://swasthyaraksha-backend.onrender.com/api/prescription/${id}`
       );
       const data = response.data.prescription;
-      console.log(`The data is : ${data}`);
       setPrescriptions(data.prescriptions);
     } catch (error) {
       console.log(error);

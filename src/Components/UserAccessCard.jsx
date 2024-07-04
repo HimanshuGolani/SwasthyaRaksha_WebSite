@@ -13,7 +13,7 @@ const UserAccessCard = ({ user }) => {
       const cardUserId = user._id;
 
       const response = await axios.post(
-        `http://localhost:4500/api/user/addAccess?userId=${_id}&accessTo=${cardUserId}`
+        `https://swasthyaraksha-backend.onrender.com/api/user/addAccess?userId=${_id}&accessTo=${cardUserId}`
       );
 
       setSnackbarMessage("User added successfully");

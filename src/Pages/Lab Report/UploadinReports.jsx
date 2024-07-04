@@ -44,12 +44,15 @@ const UploadinReports = () => {
   };
 
   const addLabReports = async () => {
-    const response = await axios.post(`http://localhost:4500/api/labR/add`, {
-      ReportName: reportData.reportName,
-      ReportDate: reportData.reportDate,
-      image: reportData.reportImage,
-      user: localStorage.getItem("userId"),
-    });
+    const response = await axios.post(
+      `https://swasthyaraksha-backend.onrender.com/api/labR/add`,
+      {
+        ReportName: reportData.reportName,
+        ReportDate: reportData.reportDate,
+        image: reportData.reportImage,
+        user: localStorage.getItem("userId"),
+      }
+    );
     const data = response.data;
     setReportData(data);
   };

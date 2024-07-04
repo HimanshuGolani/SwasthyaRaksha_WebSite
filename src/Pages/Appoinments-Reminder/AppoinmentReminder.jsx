@@ -35,9 +35,8 @@ const AppointmentReminder = () => {
     try {
       const id = localStorage.getItem("userId");
       const response = await axios.get(
-        `http://localhost:4500/api/appointments/${id}`
+        `https://swasthyaraksha-backend.onrender.com/api/appointments/${id}`
       );
-      console.log("the reminders are : ", response.data.Appointments);
       setAppointments(response.data.Appointments);
       setError("");
     } catch (error) {
@@ -53,11 +52,10 @@ const AppointmentReminder = () => {
     setIsSubmitting(true);
     try {
       const response = await axios.post(
-        "http://localhost:4500/api/appointments/create",
+        `https://swasthyaraksha-backend.onrender.com/api/appointments/create`,
         formData
       );
       setMessage("Reminder set successfully!");
-      console.log("Reminder set successfully!", response.data);
       await fetchAppointments();
       setCurrentStep("viewAppointments");
     } catch (error) {

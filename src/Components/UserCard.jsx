@@ -32,7 +32,7 @@ const UserCard = ({ user, healthProfileId }) => {
   const getHealthProfileData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:4500/api/healthprofiles/${_id}`
+        `https://swasthyaraksha-backend.onrender.com/api/healthprofiles/${_id}`
       );
       setHealthProfile(response.data);
     } catch (error) {
@@ -54,15 +54,9 @@ const UserCard = ({ user, healthProfileId }) => {
       const name = localStorage.getItem("userName");
       const email = localStorage.getItem("userEmail");
 
-      console.log("====================================");
-      console.log(userId, name, email, healthProfileId);
-      console.log("====================================");
-
       const response = await axios.post(
-        `http://localhost:4500/api/healthprofiles/whoViewdProfile/?userId=${userId}&name=${name}&email=${email}&healthProfileId=${healthProfileId}`
+        `https://swasthyaraksha-backend.onrender.com/api/healthprofiles/whoViewdProfile/?userId=${userId}&name=${name}&email=${email}&healthProfileId=${healthProfileId}`
       );
-
-      console.log(response.data);
     } catch (error) {
       console.error("Error logging profile view:", error);
     }

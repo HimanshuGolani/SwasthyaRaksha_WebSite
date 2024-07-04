@@ -5,8 +5,6 @@ import CircularProgressWithLabel from "./CircularProgressWithLabel";
 import { useNavigate } from "react-router-dom";
 
 const SignupStepper = () => {
-  const [userId, setUserId] = useState();
-
   const [formData, setFormData] = useState({
     role: "Normal-User",
     name: "",
@@ -39,7 +37,7 @@ const SignupStepper = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        "http://localhost:4500/api/user/signup",
+        `https://swasthyaraksha-backend.onrender.com/api/user/signup`,
         {
           role: formData.role,
           name: formData.name,
@@ -62,18 +60,21 @@ const SignupStepper = () => {
 
   const createHealthProfile = async (userId) => {
     try {
-      await axios.post("http://localhost:4500/api/healthprofiles/create", {
-        userId: userId,
-        name: formData.name,
-        email: formData.email,
-        age: formData.age,
-        gender: formData.gender,
-        phoneNumber: formData.phoneNumber,
-        heartDisease: formData.heartDisease,
-        hypertension: formData.hypertension,
-        allergies: formData.allergies,
-        diabetes: formData.diabetes,
-      });
+      await axios.post(
+        `https://swasthyaraksha-backend.onrender.com/api/healthprofiles/create`,
+        {
+          userId: userId,
+          name: formData.name,
+          email: formData.email,
+          age: formData.age,
+          gender: formData.gender,
+          phoneNumber: formData.phoneNumber,
+          heartDisease: formData.heartDisease,
+          hypertension: formData.hypertension,
+          allergies: formData.allergies,
+          diabetes: formData.diabetes,
+        }
+      );
     } catch (error) {
       console.error("Error creating health profile:", error);
     }

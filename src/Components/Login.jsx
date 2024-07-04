@@ -24,7 +24,7 @@ const Login = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `http://localhost:4500/api/user/login`,
+        `https://swasthyaraksha-backend.onrender.com/api/user/login`,
         {
           email: userEmail,
           password: password,
@@ -43,9 +43,6 @@ const Login = () => {
 
   const handleLogin = async () => {
     const data = await loginReq();
-    console.log("====================================");
-    console.log(data.userData.name);
-    console.log("====================================");
     if (data) {
       toast.success("Login successful!", {
         onClose: () => {

@@ -7,14 +7,10 @@ const AccessToUserCard = ({ name, email, symbolInButton, cuserId }) => {
     try {
       const id = localStorage.getItem("userId");
 
-      console.log("The profile data is ", name, email, symbolInButton, cuserId);
-
       // Specify the endpoint for the PUT request
       const response = await axios.put(
-        `http://localhost:4500/api/user/removeAccess?userId=${id}&accessTo=${cuserId}`
+        `https://swasthyaraksha-backend.onrender.com/api/user/removeAccess?userId=${id}&accessTo=${cuserId}`
       );
-
-      console.log(response);
     } catch (error) {
       console.log(error);
     }

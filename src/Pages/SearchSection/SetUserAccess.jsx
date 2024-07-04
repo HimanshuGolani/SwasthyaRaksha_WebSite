@@ -22,7 +22,7 @@ const SetUserAccess = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:4500/api/user/searchUser/?search=${search}&userId=${_id}`
+        `https://swasthyaraksha-backend.onrender.com/api/user/searchUser/?search=${search}&userId=${_id}`
       );
       setResult(response.data);
       setError(null);

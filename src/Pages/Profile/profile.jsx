@@ -22,12 +22,8 @@ const Profile = () => {
       const id = localStorage.getItem("userId");
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:4500/api/healthprofiles/getProfileViewLogs?userId=${id}`
+        `https://swasthyaraksha-backend.onrender.com/api/healthprofiles/getProfileViewLogs?userId=${id}`
       );
-
-      console.log("response logs ====================================");
-      console.log(response.data.logs);
-      console.log("====================================");
 
       if (response.data.logs) {
         const logsArray = Object.entries(response.data.logs).map(
@@ -39,7 +35,6 @@ const Profile = () => {
           })
         );
 
-        console.log("The logs array", logsArray);
         setViewedData(logsArray);
       } else {
         console.error("No logs found in the response");
@@ -54,10 +49,9 @@ const Profile = () => {
     const id = localStorage.getItem("userId");
     try {
       const response = await axios.get(
-        `http://localhost:4500/api/healthprofiles/${id}`
+        `https://swasthyaraksha-backend.onrender.com/api/healthprofiles/${id}`
       );
       setProfileData(response.data);
-      console.log(`response.data`, response);
     } catch (error) {
       console.log(error);
     }
@@ -69,9 +63,8 @@ const Profile = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost:4500/api/user/getAccessUsersInfo?userId=${id}`
+        `https://swasthyaraksha-backend.onrender.com/api/user/getAccessUsersInfo?userId=${id}`
       );
-      console.log("The access to is :", response.data);
       setAccessTo(response.data);
     } catch (error) {
       console.log(error);
@@ -84,7 +77,7 @@ const Profile = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost:4500/api/user/getAccessForData?userId=${id}`
+        `https://swasthyaraksha-backend.onrender.com/api/user/getAccessForData?userId=${id}`
       );
       setListData(response.data);
     } catch (error) {

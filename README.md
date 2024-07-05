@@ -1,11 +1,11 @@
 
-# Project Title
+SwasthyaRaksha
 
 A brief description of what this project does and who it's for
 
-# HealthTracker
+ SwasthyaRaksha
 
-HealthTracker is a MERN (MongoDB, Express.js, React.js, Node.js) stack project aimed at providing users with a platform to store and share their health-related data securely. It allows users to maintain their health profiles, prescriptions, lab reports, and appointment reminders, facilitating easy access to crucial health information during emergencies.
+SwasthyaRaksha_WebSite is a MERN (MongoDB, Express.js, React.js, Node.js) stack project aimed at providing users with a platform to store and share their health-related data securely. It allows users to maintain their health profiles, prescriptions, lab reports, and appointment reminders, facilitating easy access to crucial health information during emergencies.
 
 ## Features
 

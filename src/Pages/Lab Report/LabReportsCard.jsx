@@ -1,26 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
 
 const LabReportsCard = ({ ReportType, ReportDate, ReportImage }) => {
   const [hovered, setHovered] = useState(false);
   const imageRef = useRef(null);
-
-  const handleDownload = () => {
-    axios
-      .get(ReportImage, { responseType: "blob" })
-      .then((response) => {
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", "report_image.jpg");
-        document.body.appendChild(link);
-        link.click();
-        window.URL.revokeObjectURL(url);
-      })
-      .catch((error) => {
-        console.error("Error downloading image:", error);
-      });
-  };
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -66,12 +48,13 @@ const LabReportsCard = ({ ReportType, ReportDate, ReportImage }) => {
             >
               View Fullscreen
             </button>
-            <button
+            <a
+              href="#"
               className="bg-green-500 text-white font-bold py-1 px-3 rounded"
-              onClick={handleDownload}
+              download={ReportImage}
             >
               Download
-            </button>
+            </a>
           </div>
         )}
       </div>

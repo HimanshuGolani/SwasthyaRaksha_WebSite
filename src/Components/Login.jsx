@@ -44,13 +44,12 @@ const Login = () => {
   const handleLogin = async () => {
     const data = await loginReq();
     if (data) {
+      localStorage.setItem("userName", data.userData.name);
+      localStorage.setItem("userEmail", data.userData.email);
+      localStorage.setItem("userId", data.id);
+      localStorage.setItem("userInfo", JSON.stringify(data.userData));
       toast.success("Login successful!", {
         onClose: () => {
-          localStorage.setItem("userName", data.userData.name);
-          localStorage.setItem("userEmail", data.userData.email);
-          localStorage.setItem("userId", data.id);
-          localStorage.setItem("userInfo", JSON.stringify(data.userData));
-
           dispatch(authActions.login());
           navigate("/");
         },

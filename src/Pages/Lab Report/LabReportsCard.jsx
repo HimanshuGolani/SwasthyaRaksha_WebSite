@@ -49,6 +49,7 @@ const LabReportsCard = ({ ReportType, ReportDate, ReportImage }) => {
               View Fullscreen
             </button>
             <a
+              href="#_blank"
               className="bg-green-500 text-white font-bold py-1 px-3 rounded"
               download={ReportImage}
             >

@@ -29,7 +29,6 @@ function App() {
         <Route path="/uploadeP" element={<UploadePrescription />} />
         <Route path="/search" element={<SearchUser />} />
         <Route path="/setaccess" element={<SetUserAccess />} />
-        {/* <Route path="/HealthProfile" element={<HealthProfile />} /> */}
       </Routes>
     </>
   );

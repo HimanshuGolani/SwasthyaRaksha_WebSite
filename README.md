@@ -42,12 +42,6 @@ By leveraging modern technologies like React.js, React-Native, Tailwind.css, Nod
 - **Database:** MongoDB
 - **Other Tools:** NodeMailer to send mail reminders of the appointment, bcrypt.js to encrypt the data, etc.
 
-## Installation
-
-1. **Install dependencies:**
-   ```bash
-   npm i
-
 
 
 ## API Endpoints

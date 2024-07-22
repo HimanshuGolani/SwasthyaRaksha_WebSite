@@ -8,31 +8,31 @@ const Home = () => {
   const cardData = [
     {
       url: "https://blogimages.softwaresuggest.com/blog/wp-content/uploads/2023/02/08161311/Top-15-Hospital-Information-Systems-You-Must-Look-Into-1.jpg",
-      contentH: "Access Health Documents anytime anywhere.",
+      contentH: "Access Health Documents Anytime, Anywhere",
       contentD:
-        "You can store and review all the health related data in just one click.",
+        "Store and review all your health-related data with just one click.",
     },
     {
       url: cardImage,
-      contentH: "See your health data over time",
+      contentH: "Track Your Health Data Over Time",
       contentD:
-        "Easily view your health data over time with daily, weekly, monthly, and yearly views.",
+        "View your health data with daily, weekly, monthly, and yearly views.",
     },
     {
       url: cardImage2,
-      contentH: "Forgeting your the appoinments ? No worries!",
+      contentH: "Never Miss an Appointment",
       contentD:
-        "Our app will remind you about upcoming appointments. Get reminded before 24hr and 3hr before the appoinment. You can also add or remove them at any time. ",
+        "Get reminders 24 hours and 3 hours before your appointments. Add or remove reminders anytime.",
     },
   ];
 
   return (
     <div className="flex flex-col items-center pb-5 bg-white">
       <div className="flex flex-col justify-center px-10 pt-12 pb-6 max-w-full w-[781px] max-md:px-5">
-        <div className="text-center md:text-green-600 text-5xl font-extrabold tracking-tighter max-md:mt-10 max-md:max-w-full max-md:text-3xl">
+        <div className="text-center text-green-600 text-5xl font-extrabold tracking-tighter max-md:mt-10 max-md:max-w-full max-md:text-3xl">
           Welcome to Swasthya Raksha
         </div>
-        <div className="mt-2 text-lg rounded md:text-black-600 leading-[150%] max-md:max-w-full">
+        <div className="mt-2 text-lg rounded text-black-600 leading-[150%] max-md:max-w-full">
           Your personal health dashboard for tracking your health data and
           managing your health records.
         </div>
@@ -41,21 +41,23 @@ const Home = () => {
         <img
           src={mainCImg}
           className="object-cover h-50 w-120 absolute inset-0 size-full"
+          alt="Main Content"
+          loading="lazy"
         />
       </div>
       <div className="flex flex-col px-4 py-10 mt-4 w-full max-w-[960px] max-md:max-w-full">
-        <div className="text-4xl text-center font-extrabold tracking-tighter md:text-green-600 max-md:mr-1 max-md:max-w-full">
-          Why track your health data?
+        <div className="text-4xl text-center font-extrabold tracking-tighter text-green-600 max-md:mr-1 max-md:max-w-full">
+          Why Track Your Health Data?
         </div>
-        <div className="mt-4  leading-6 text-lg text-neutral-900 max-md:mr-1 max-md:max-w-full">
-          Tracking your health data can help you identify trends and patterns in
-          your health, so you can make more informed decisions about your
-          lifestyle and healthcare. With Health Tracker, you can easily track
-          your nutrition, workouts, sleep, and more, and see your health data
-          over time to better understand your health.
+        <div className="mt-4 leading-6 text-lg text-neutral-900 max-md:mr-1 max-md:max-w-full">
+          Tracking your health data helps you identify trends and patterns,
+          enabling informed decisions about your lifestyle and healthcare. With
+          Health Tracker, you can easily track your nutrition, workouts, sleep,
+          and more, and see your health data over time to better understand your
+          health.
         </div>
       </div>
-      <div className="grid grid-flow-col grid-rows-2 grid-cols-2 gap-1 place-items-center	mt-10 max-md:mt-10 max-md:max-w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 place-items-center mt-10 max-w-full">
         {cardData.map((card, index) => (
           <Card key={index} {...card} />
         ))}
